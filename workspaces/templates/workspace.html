@@ -1,0 +1,132 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<section class="row">
+
+    <div class="er-waveform">
+        <div id="waveform">
+        </div>
+        <div id="wave-timeline">
+
+        </div>
+
+    </div>
+
+
+    <article class="er-add-line">
+
+
+        <table>
+            <form>
+                <tr>
+                    <td class="er-current-cell">
+                        <input type="text" id="er-line-input"
+                            placeholder="Click to add your lyric and keep playing or hit pause" autocomplete="off">
+                    </td>
+                    <td>
+                        <button class="er-button">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </td>
+                </tr>
+            </form>
+
+            <tr>
+                <td>
+                    <input type="range" min="1" max="100" value="0" class="er-slider-play" id="er-slider-input">
+                </td>
+                <td class="er-control-time">
+                    <div id="er-current-time">00:00</div>
+                    <div id="er-total-time"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="er-controls">
+                        <tr>
+                            <td>
+                                <div class="er-control-wrap" id="er-control-play">
+                                    <div class="er-control">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="er-control-wrap er-control-hide" id="er-control-pause">
+                                    <div class="er-control">
+                                        <i class="fas fa-pause"></i>
+                                    </div>
+                                </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="er-control-wrap" id="er-control-stop">
+                                    <div class="er-control">
+                                        <i class="fas fa-stop"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="er-control-wrap" id="er-control-backward">
+                                    <div class="er-control"><i class="fas fa-step-backward"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="er-control-wrap" id="er-control-forward">
+                                    <div class="er-control">
+                                        <i class="fas fa-step-forward"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+
+
+    </article>
+
+
+
+
+
+    <div></div>
+</section>
+
+
+
+<!-- Load Amplitude audio player -->
+
+<script>
+    var wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#41c346',
+        progressColor: '#DADADA',
+        cursorColor: "#FF0000",
+        cursorWidth: "5",
+        height: '96',
+        interact: false,
+        plugins: [
+            WaveSurfer.timeline.create({
+                container: "#wave-timeline",
+
+                primaryColor: "#FFFFFF",
+                secondaryColor: "#FFFFFF",
+                primaryFontColor: "#FFFFFF",
+                secondaryFontColor: "#FFFFFF",
+            })
+        ]
+    });
+    wavesurfer.load('{{ MEDIA_URL }}{{ sound.audio }}');
+</script>
+
+<script src="{% static 'js/workspaceEvents.js' %}"></script>
+
+{% endblock %}
