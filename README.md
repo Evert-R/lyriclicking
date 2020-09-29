@@ -1,4 +1,4 @@
-# Collabo writer
+# Lyriclicking
 ### Collaborate on a track with multiple lyricists
 #### Coded by Evert Rot
 
@@ -7,3 +7,6 @@
 
 ## Project purpose
 This project was designed to provide a private workspace for a group of vocal artists to work together on a track. An instrumental or beat can be uploaded after wich the lyricists write their lyrics and  
+
+## Technologies Used
+-[Slider Creator](http://danielstern.ca/range.css/#/)
