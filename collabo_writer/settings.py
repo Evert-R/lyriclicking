@@ -87,12 +87,24 @@ WSGI_APPLICATION = 'collabo_writer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+if os.environ.get('DEVELOPMENT'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("POSTGRESQL_NAME"),
+            'USER': os.environ.get("POSTGRESQL_USER"),
+            'PASSWORD': os.environ.get("POSTGRESQL_PASS"),
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -132,8 +144,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATICFILES_LOCATION = 'static'
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "static/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
