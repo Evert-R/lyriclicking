@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mathfilters',
     'sounds',
-    'workspaces'
+    'workspaces',
+    'lyrics'
 ]
 
 MIDDLEWARE = [
@@ -87,24 +89,16 @@ WSGI_APPLICATION = 'collabo_writer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if os.environ.get('DEVELOPMENT'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': str(BASE_DIR / 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("POSTGRESQL_NAME"),
+        'USER': os.environ.get("POSTGRESQL_USER"),
+        'PASSWORD': os.environ.get("POSTGRESQL_PASS"),
+        'HOST': 'localhost',
+        'PORT': '',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("POSTGRESQL_NAME"),
-            'USER': os.environ.get("POSTGRESQL_USER"),
-            'PASSWORD': os.environ.get("POSTGRESQL_PASS"),
-            'HOST': 'localhost',
-            'PORT': '',
-        }
-    }
+}
 
 
 # Password validation

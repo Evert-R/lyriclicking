@@ -1,10 +1,32 @@
-function pushTotalTime() {
-    let totalTime = secondsToString(Math.round(wavesurfer.getDuration()));
-    $('#er-total-time').html(totalTime);
+// This will make the lyrics available in JS
+const jsLyrics = JSON.parse(document.getElementById('js-lyrics').textContent);
+
+// Put all the lyric hitpoints in an array for easy sorting and event triggering
+let jsLyricKeys = [];
+jsLyricKeys.sort();
+for (var key in jsLyrics) {
+    jsLyricKeys.push(key);
 }
 
-function pushPlaceolder() {
-    $('#er-line-input').attr('placeholder', 'Click to add your lyric at ' + currentMs() + ' ms');
+
+function checkPosition(position, index) {
+    if (getCurrentMs() >= position && getCurrentMs() < jsLyricKeys[index + 1]) {
+        $('#er-big-' + position).addClass('er-line-active');
+        $('#er-big-' + jsLyricKeys[index - 1]).removeClass('er-line-active');
+        $('#er-line-' + position).addClass('er-line-fade');
+    }
+}
+
+function pushActiveLine() {
+
+}
+
+function repositionLyrics() {
+    pushCurrentTime();
+    $('#er-lyrics').css('top', '-' + (getCurrentMs() / 7) + 'px');
+    $('.er-current-line').removeClass('er-line-active');
+    $('.er-line').removeClass('er-line-fade');
+    jsLyricKeys.forEach(checkPosition);
 }
 
 function secondsToString(seconds) {
@@ -13,7 +35,12 @@ function secondsToString(seconds) {
     return ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2);
 }
 
-function currentMs() {
+function currentString() {
+    let currentString = secondsToString(Math.round(wavesurfer.getCurrentTime()));
+    return currentString;
+}
+
+function getCurrentMs() {
     let currentTime = wavesurfer.getCurrentTime();
     return Math.round(currentTime * 1000);
 }
@@ -23,57 +50,151 @@ function getTotalMs() {
     return Math.round(totalTime * 1000);
 }
 
-function currentString() {
-    let currentString = secondsToString(Math.round(wavesurfer.getCurrentTime()));
-    return currentString;
+
+
+function pushTotalTime() {
+    let totalTime = secondsToString(Math.round(wavesurfer.getDuration()));
+    $('#er-total-time').html(totalTime);
 }
 
-window.onload = function () {
-    wavesurfer.on('ready', function () {
-        pushTotalTime();
+function pushPlaceolder() {
+    $('#er-line-input').attr('placeholder', 'Click to add your lyric at ' + getCurrentMs() + ' ms');
+    $('#er-current-ms').html(getCurrentMs());
+}
 
-        $('#er-control-play').addClass('er-control-active');
-        $('#er-control-forward').addClass('er-control-active');
-        $('#er-control-forward').addClass('er-hover-yellow');
-        $('#er-control-play').addClass('er-hover-green');
+function pushCurrentEditTime() {
+    $('#er-line-input').val(getCurrentMs() + ': ');
+    $('#er-current-time').html(currentString());
+    $('.er-slider-play').val(getCurrentMs());
+}
 
+function pushCurrentTime() {
+    pushPlaceolder();
+    $('#er-current-time').html(currentString());
+    $('.er-slider-play').val(getCurrentMs());
+}
 
+function skipBack(callback) {
+    wavesurfer.skipBackward();
+    callback();
+}
 
-        $('#er-control-play').on('click', function () {
-            $('#er-line-input').val('');
-            $('#er-control-play').addClass('er-control-hide');
-            $('#er-control-pause').removeClass('er-control-hide');
-            $('#er-control-pause').addClass('er-control-green');
-            $('#er-control-pause').addClass('er-hover-dark');
-            wavesurfer.play();
+function skipForward(callback) {
+    wavesurfer.skipForward();
+    callback();
+}
 
-        });
+function addLine() {
+    console.log("create post is working!") // sanity check
+    $.ajax({
+        url: "lyrics/add/", // the endpoint
+        type: "POST", // http method
+        data: { new_line: $('#er-line-input').val() }, // data sent with the post request
 
-        $('#er-control-stop').on('click', function () {
-            $('#er-control-play').removeClass('er-control-hide');
-            $('#er-control-play').removeClass('er-control-green');
-            $('#er-control-play').removeClass('er-control-blink');
-            $('#er-control-pause').addClass('er-control-hide');
-            $('#er-control-stop').addClass('er-control-blue');
-            $('#er-control-backward').removeClass('er-control-active');
-            $('#er-control-backward').removeClass('er-hover-yellow');
-            $('.er-slider-play').val(0);
-            wavesurfer.stop();
-        });
+        // handle a successful response
+        success: function (json) {
+            $('#er-line-input').val(''); // remove the value from the input
+            console.log(json); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
 
-        $('#er-slider-input').attr('max', getTotalMs());
-
-
+        // handle a non-successful response
+        error: function (json) {
+            console.log(json); // log the returned json to the console
+            console.log("error"); // another sanity check
+        }
     });
+};
+
+window.onload = function () {
+
+    // Submit post on submit
+    $('#er-add-line').on('submit', function (event) {
+        event.preventDefault();
+        console.log("form submitted!")  // sanity check
+        addLine();
+    });
+
+
+    $('#er-line-input').on('click', function () {
+        $('#er-line-input').val(getCurrentMs() + ': ');
+    })
+
+    $('#er-control-backward').on('click', function () {
+        skipBack(repositionLyrics);
+    });
+
+    $('#er-control-forward').on('click', function () {
+        $('#er-control-backward').addClass('er-control-active');
+        $('#er-control-backward').addClass('er-hover-yellow');
+        skipForward(repositionLyrics);
+    });
+
+    function gotoPosition(position, callback) {
+        wavesurfer.seekTo(position);
+        callback();
+    }
+
+    $('#er-slider-input').change(function () {
+        let progress = $('#er-slider-input').val();
+        let range = (1 / getTotalMs());
+        let position = (range * progress);
+        gotoPosition(position, repositionLyrics)
+    })
+
+
 };
 
 
 
+wavesurfer.on('ready', function () {
+    pushTotalTime();
+
+    // Activate play and forward
+    $('#er-control-play').addClass('er-control-active');
+    $('#er-control-forward').addClass('er-control-active');
+    $('#er-control-forward').addClass('er-hover-yellow');
+    $('#er-control-play').addClass('er-hover-green');
+
+
+    // activate stop, backwards, hide play, show pause
+    $('#er-control-play').on('click', function () {
+        $('#er-line-input').val('');
+        $('#er-control-play').addClass('er-control-hide');
+        $('#er-control-pause').removeClass('er-control-hide');
+        $('#er-control-pause').addClass('er-control-green');
+        $('#er-control-pause').addClass('er-hover-dark');
+        wavesurfer.play();
+
+    });
+
+    // show play, rewind track
+    $('#er-control-stop').on('click', function () {
+        $('#er-control-play').removeClass('er-control-hide');
+        $('#er-control-play').removeClass('er-control-green');
+        $('#er-control-play').removeClass('er-control-blink');
+        $('#er-control-pause').addClass('er-control-hide');
+        $('#er-control-stop').addClass('er-control-blue');
+        $('#er-control-backward').removeClass('er-control-active');
+        $('#er-control-backward').removeClass('er-hover-yellow');
+        $('.er-slider-play').val(0);
+        $('.er-current-line').removeClass('er-line-active');
+        wavesurfer.stop();
+    });
+
+    // set slider range to total milliseconds
+    $('#er-slider-input').attr('max', getTotalMs());
+
+    // set height of the lyrics windows
+    $('#er-lyrics').css('height', (getTotalMs() / 7) + 'px');
+});
 
 wavesurfer.on('audioprocess', function () {
     if (wavesurfer.isPlaying()) {
+        // 
         $('#er-current-time').html(currentString());
         pushPlaceolder();
+        $('#er-lyrics').css('top', '-' + (getCurrentMs() / 7) + 'px');
 
         $('#er-control-backward').addClass('er-control-active');
 
@@ -84,7 +205,7 @@ wavesurfer.on('audioprocess', function () {
         $('#er-control-play').removeClass('er-control-blink');
         $('#er-control-pause').on('click', function () {
             $('#er-line-input').val('');
-            // $('#er-line-input').val(currentMs() + ': ');
+            // $('#er-line-input').val(getCurrentMs() + ': ');
             $('#er-control-play').removeClass('er-control-hide');
             $('#er-control-play').addClass('er-control-blink');
             $('#er-control-play').addClass('er-control-green');
@@ -93,7 +214,7 @@ wavesurfer.on('audioprocess', function () {
             wavesurfer.pause();
         });
 
-        $('.er-slider-play').val(currentMs());
+        $('.er-slider-play').val(getCurrentMs());
 
 
 
@@ -106,57 +227,23 @@ wavesurfer.on('audioprocess', function () {
             $('#er-slider-input').addClass('er-slider-play');
         })
 
-        $('#er-control-backward').on('click', function () {
 
-            pushCurrentTime();
-        });
-        $('#er-control-forward').on('click', function () {
 
-            pushCurrentTime();
-        });
 
+
+        jsLyricKeys.forEach(checkPosition)
 
     }
 });
 
 
-function pushCurrentEditTime() {
-    $('#er-line-input').val(currentMs() + ': ');
-    $('#er-current-time').html(currentString());
-    $('.er-slider-play').val(currentMs());
-}
-
-function pushCurrentTime() {
-    pushPlaceolder();
-    $('#er-current-time').html(currentString());
-    $('.er-slider-play').val(currentMs());
-}
 
 
 
 
 
-$('#er-line-input').on('click', function () {
-    $('#er-line-input').val(currentMs() + ': ');
-})
-
-$('#er-control-backward').on('click', function () {
-    wavesurfer.skipBackward();
-
-});
-$('#er-control-forward').on('click', function () {
-    wavesurfer.skipForward();
-    $('#er-control-backward').addClass('er-control-active');
-    $('#er-control-backward').addClass('er-hover-yellow');
-
-});
 
 
 
-$('#er-slider-input').change(function () {
-    let progress = $('#er-slider-input').val();
-    let range = (1 / getTotalMs());
-    let slide = (range * progress);
-    wavesurfer.seekTo(slide);
-    pushPlaceolder();
-})
+
+

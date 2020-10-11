@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 html {
     font-size: 16px;
 }
 
 body {
+    overflow: hidden;
     margin: 0;
     background-image: url('/static/images/blackboard.jpg');
 }
@@ -10,15 +13,22 @@ body {
 h1 {
     text-align: right;
     padding-right: 1rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Audiowide', cursive;
+    letter-spacing: 0.2rem;
+    color: rgba(177, 0, 0, 0.9);
 }
+
+/* -------------------------header */
 
 .er-header {
     position: fixed;
     top: 0;
     right: 0;
-    width: 66vw;
+    width: 100vw;
     height: 10vh;
+    border-bottom-style: solid;
+    border-width: 0.1px;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 header a {
@@ -54,14 +64,103 @@ header a:active {
     font-size: 1.5rem;
 }
 
-.er-waveform {
-    cursor: pointer;
+/* -------------------------Lyrics field */
+
+.er-lyrics-gradient {
+    background: rgba(0, 0, 0, 0);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 47%, rgba(0, 0, 0, 0.8) 53%, rgba(0, 0, 0, 0) 100%);
     position: fixed;
-    left: -42vh;
-    top: 43vh;
+    top: 0vh;
+    left: 0;
+    width: 100vw;
+    height: 66vh;
+    z-index: 2000;
+}
+
+.er-lyrics-wrap {
+    position: absolute;
+    top: 0vh;
+    right: 0;
+    width: 85vw;
+    height: 75vh;
+    overflow: hidden;
+}
+
+#er-lyrics {
+    margin-top: 34vh;
+    position: relative;
+    right: 0;
+    width: 100%;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.er-current-line {
+    width: 80vw;
+    opacity: 0;
+    z-index: 5000;
+    position: fixed;
+    right: 0;
+    top: 30vh;
+    font-family: 'Special Elite', cursive;
+    color: rgba(255, 255, 255, 1);
+    font-size: 1rem;
+    transition-property: all;
+    transition-timing-function: ease-out;
+    transition-duration: 0.25s;
+}
+
+.er-current-line p {
+    text-align: center;
+}
+
+.er-line {
+    opacity: 1;
+    width: 100%;
+    font-family: 'Special Elite', cursive;
+    color: rgba(255, 255, 255, 1);
+    font-size: 1rem;
+    position: absolute;
+    transition-property: all;
+    transition-timing-function: ease-out;
+    transition-duration: 2s;
+}
+
+.er-line p {
+    text-align: center;
+}
+
+.er-line-active {
+    opacity: 1;
+}
+
+.er-line-fade {
+    opacity: 0;
+    font-size: 0.8rem;
+}
+
+/* -------------------------Waveform */
+
+.er-waveform {
+    position: absolute;
+    left: -35vh;
+    top: 35vh;
     transform: rotate(90deg);
-    width: 100vh;
-    z-index: 1030;
+    width: 80vh;
+    z-index: 3000;
+}
+
+#wave-timeline {
+    display: none;
+}
+
+/* -------------------------Control section */
+
+.er-controls-wrap {
+    width: 100%;
+    position: absolute;
+    bottom: 0rem;
+    right: 0;
+    z-index: 9000;
 }
 
 .er-controls {
@@ -74,13 +173,13 @@ header a:active {
 
 .er-controls i {
     color: rgba(0, 0, 0, 0.2);
-    font-size: 2rem;
+    font-size: 1.6rem;
 }
 
-.er-control-wrap {
+.er-control-button {
     overflow: hidden;
-    width: 3.2rem;
-    height: 3.2rem;
+    width: 2.4rem;
+    height: 2.4rem;
     background-color: rgba(0, 0, 0, 0.1);
     display: inline-block;
     cursor: pointer;
@@ -91,11 +190,11 @@ header a:active {
     box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.2);
 }
 
-.er-control-wrap:hover {
+.er-control-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.er-control-wrap:active {
+.er-control-button:active {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
@@ -184,29 +283,23 @@ header a:active {
     color: rgba(150, 150, 150);
 }
 
-.er-add-line {
-    width: 80vw;
-    position: fixed;
-    bottom: 1vh;
-    right: 0;
-    z-index: 9000;
-}
+/* -------------------------Form classes */
 
-.er-add-line table {
+table {
     width: 100%;
     border-spacing: 0.4rem;
 }
 
-.er-add-line td {
-    padding: 0.2rem 0rem;
+td {
     text-align: center;
     vertical-align: middle;
 }
 
-.er-add-line input[type=text] {
+input[type=text] {
     height: 1.7rem;
     width: 100%;
     padding-left: 0.5rem;
+    margin-bottom: 0.2rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.7rem;
     color: rgba(255, 255, 255);
@@ -217,12 +310,12 @@ header a:active {
     border-color: rgba(195, 195, 19, 1);
 }
 
-.er-add-line input[type=range] {
+input[type=range] {
     height: 1rem;
     width: 100%;
 }
 
-.er-add-line input::placeholder {
+input::placeholder {
     color: rgba(255, 255, 255, 0.8)
 }
 
@@ -244,7 +337,12 @@ header a:active {
     text-align: center;
 }
 
-.er-add-line button {
+.er-button-cell {
+    width: 3.9rem;
+}
+
+button {
+    cursor: pointer;
     display: inline-block;
     box-sizing: border-box;
     height: 2rem;
@@ -361,5 +459,32 @@ input[type=range]:focus::-ms-fill-upper {
     input[type=range] {
         margin: 0;
         /*Edge starts the margin from the thumb, not the track as other browsers do*/
+    }
+}
+
+@media(min-width: 576px) {
+    .er-header {
+        width: 80vw;
+    }
+    .er-waveform {
+        left: -42vh;
+        top: 43vh;
+        width: 100vh;
+    }
+    #wave-timeline {
+        display: block;
+    }
+    .er-controls-wrap {
+        width: 85vw;
+    }
+    .er-control-button {
+        width: 3rem;
+        height: 3rem;
+    }
+    .er-controls i {
+        font-size: 1.8rem;
+    }
+    input[type=text] {
+        font-size: 0.7rem;
     }
 }

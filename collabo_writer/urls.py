@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.views import static
 from django.conf.urls.static import static
 from django.conf import settings
@@ -23,6 +23,7 @@ from workspaces.views import work_space
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', work_space, name='work_space'),
+    path('lyrics/', include('lyrics.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
