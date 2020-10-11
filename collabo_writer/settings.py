@@ -29,10 +29,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 if os.environ.get('DEVELOPMENT'):
     DEBUG = True
 else:
-    DEBUG = True
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
+    'www.lyriclicking.nl',
+    'www.lyriclicking.com',
     '192.168.2.1',
     '192.168.2.12',
     '192.168.2.10',
