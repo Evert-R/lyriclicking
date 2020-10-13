@@ -5,12 +5,17 @@ html {
 }
 
 body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
     overflow: hidden;
     margin: 0;
     background-image: url('/static/images/blackboard.jpg');
 }
 
 h1 {
+    font-size: 1.5rem;
     text-align: right;
     padding-right: 1rem;
     font-family: 'Audiowide', cursive;
@@ -156,6 +161,8 @@ header a:active {
 /* -------------------------Control section */
 
 .er-controls-wrap {
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
     width: 100%;
     position: absolute;
     bottom: 0rem;
@@ -171,9 +178,48 @@ header a:active {
     text-align: center;
 }
 
-.er-controls i {
+.er-control-button i {
     color: rgba(0, 0, 0, 0.2);
     font-size: 1.6rem;
+}
+
+.er-half-button {
+    overflow: hidden;
+    width: 1.8rem;
+    height: 0.7rem;
+    margin: 0 0.75rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.3);
+    border-width: 2px;
+    border-radius: 0.2rem;
+    box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.2);
+}
+
+.er-half-top {
+    margin-bottom: 0.65rem;
+}
+
+.er-half-bottom {
+    margin-top: 0.65rem;
+}
+
+.er-half-button i {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 0.7rem;
+}
+
+.er-button-doubler {
+    height: 2.4rem;
+    display: inline-block;
+}
+
+.er-skip-ms {
+    padding: 0.1rem 0;
+    height: 0.8rem;
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.2);
 }
 
 .er-control-button {
@@ -190,11 +236,11 @@ header a:active {
     box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.2);
 }
 
-.er-control-button:hover {
+.er-control-button:hover, .er-half-button:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.er-control-button:active {
+.er-control-button:active, .er-half-button:active {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
@@ -481,8 +527,24 @@ input[type=range]:focus::-ms-fill-upper {
         width: 3rem;
         height: 3rem;
     }
-    .er-controls i {
+    .er-control-button i {
         font-size: 1.8rem;
+    }
+    .er-button-doubler {
+        height: 3rem;
+    }
+    .er-half-button {
+        width: 2.4rem;
+        height: 1rem;
+    }
+    .er-half-button i {
+        font-size: 0.75rem;
+    }
+    .er-half-top {
+        margin-bottom: 0.8rem;
+    }
+    .er-half-bottom {
+        margin-top: 0.8rem;
     }
     input[type=text] {
         font-size: 0.7rem;

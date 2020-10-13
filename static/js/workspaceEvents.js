@@ -9,6 +9,7 @@ for (var key in jsLyrics) {
 }
 
 
+
 function checkPosition(position, index) {
     if (getCurrentMs() >= position && getCurrentMs() < jsLyricKeys[index + 1]) {
         $('#er-big-' + position).addClass('er-line-active');
@@ -17,8 +18,9 @@ function checkPosition(position, index) {
     }
 }
 
-function pushActiveLine() {
-
+function gotoPosition(position, callback) {
+    wavesurfer.seekTo(position);
+    callback();
 }
 
 function repositionLyrics() {
@@ -74,13 +76,42 @@ function pushCurrentTime() {
     $('.er-slider-play').val(getCurrentMs());
 }
 
+let skipLength = 1000;
+$('#er-skip-length').html(skipLength);
+
+$('#er-skip-plus').on('click', function () {
+    if (skipLength != 100000) {
+        skipLength = skipLength * 10;
+    }
+    if (skipLength == 100000) {
+        $('#er-skip-plus').removeClass('er-control-active')
+    }
+    if (skipLength == 10) {
+        $('#er-skip-minus').addClass('er-control-active')
+    }
+    $('#er-skip-length').html(skipLength);
+})
+
+$('#er-skip-minus').on('click', function () {
+    if (skipLength != 1) {
+        skipLength = skipLength / 10;
+    }
+    if (skipLength == 1) {
+        $('#er-skip-minus').removeClass('er-control-active')
+    }
+    if (skipLength == 10000) {
+        $('#er-skip-plus').addClass('er-control-active')
+    }
+    $('#er-skip-length').html(skipLength);
+})
+
 function skipBack(callback) {
-    wavesurfer.skipBackward();
+    wavesurfer.skip(- (skipLength / 1000));
     callback();
 }
 
 function skipForward(callback) {
-    wavesurfer.skipForward();
+    wavesurfer.skip(skipLength / 1000);
     callback();
 }
 
@@ -117,7 +148,9 @@ window.onload = function () {
 
 
     $('#er-line-input').on('click', function () {
-        $('#er-line-input').val(getCurrentMs() + ': ');
+        if ($('#er-line-input').val() == '') {
+            $('#er-line-input').val(getCurrentMs() + ': ');
+        }
     })
 
     $('#er-control-backward').on('click', function () {
@@ -130,10 +163,7 @@ window.onload = function () {
         skipForward(repositionLyrics);
     });
 
-    function gotoPosition(position, callback) {
-        wavesurfer.seekTo(position);
-        callback();
-    }
+
 
     $('#er-slider-input').change(function () {
         let progress = $('#er-slider-input').val();
@@ -149,7 +179,6 @@ window.onload = function () {
 
 wavesurfer.on('ready', function () {
     pushTotalTime();
-
     // Activate play and forward
     $('#er-control-play').addClass('er-control-active');
     $('#er-control-forward').addClass('er-control-active');

@@ -54,15 +54,17 @@
             <td>
                 <input type="range" min="1" max="100" value="0" class="er-slider-play" id="er-slider-input">
             </td>
-            <td class="er-control-time">
-                <div id="er-current-time">00:00</div>
-                <div id="er-total-time"></div>
-            </td>
+
         </tr>
 
         <tr>
             <td>
                 <table class="er-controls">
+                    <tr>
+                        <td>Play</td>
+                        <td>Stop</td>
+                        <td><span id="er-skip-length"></span> ms</td>
+                    </tr>
                     <tr>
                         <td>
                             <div class="er-control-button" id="er-control-play">
@@ -74,7 +76,6 @@
                                 <div class="er-control">
                                     <i class="fas fa-pause"></i>
                                 </div>
-                            </div>
                             </div>
                         </td>
 
@@ -90,23 +91,39 @@
                                 <div class="er-control"><i class="fas fa-step-backward"></i>
                                 </div>
                             </div>
-                        </td>
-                        <td>
+                            <div class="er-button-doubler">
+                                <div class="er-half-button er-half-top er-control-active" id="er-skip-plus">
+                                    <div class="er-control">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                </div>
+
+                                <div class="er-half-button er-half-bottom er-control-active" id="er-skip-minus">
+                                    <div class="er-control">
+                                        <i class="fas fa-minus"></i>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="er-control-button" id="er-control-forward">
                                 <div class="er-control">
                                     <i class="fas fa-step-forward"></i>
+
                                 </div>
+
                             </div>
                         </td>
-                        <td>
 
-                        </td>
+
                     </tr>
+
                 </table>
             </td>
-            <td>
 
+            <td class="er-control-time">
+                <div id="er-current-time">00:00</div>
+                <div id="er-total-time"></div>
             </td>
+
         </tr>
     </table>
 
@@ -142,6 +159,7 @@
         cursorWidth: "5",
         height: waveHeight(),
         interact: false,
+        responsive: true,
         plugins: [
             WaveSurfer.timeline.create({
                 container: "#wave-timeline",
@@ -153,6 +171,7 @@
         ]
     });
     wavesurfer.load('{{ MEDIA_URL }}{{ sound.audio }}');
+    console.log(wavesurfer);
 </script>
 
 <script src="{% static 'js/workspaceEvents.js' %}"></script>
