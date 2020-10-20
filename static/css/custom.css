@@ -5,6 +5,7 @@ html {
 }
 
 body {
+    height: 100vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.8rem;
     font-weight: 300;
@@ -73,7 +74,7 @@ header a:active {
 
 .er-lyrics-gradient {
     background: rgba(0, 0, 0, 0);
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 47%, rgba(0, 0, 0, 0.8) 53%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 47%, rgba(0, 0, 0, 0.8) 57%, rgba(0, 0, 0, 0.3) 75%, rgba(0, 0, 0, 0) 100%);
     position: fixed;
     top: 0vh;
     left: 0;
@@ -87,12 +88,12 @@ header a:active {
     top: 0vh;
     right: 0;
     width: 85vw;
-    height: 75vh;
+    height: 100vh;
     overflow: hidden;
 }
 
 #er-lyrics {
-    margin-top: 34vh;
+    margin-top: 33vh;
     position: relative;
     right: 0;
     width: 100%;
@@ -107,8 +108,9 @@ header a:active {
     right: 0;
     top: 31vh;
     font-family: 'Special Elite', cursive;
-    color: rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 0.85);
     font-size: 1rem;
+    letter-spacing: 1px;
     transition-property: all;
     transition-timing-function: ease-out;
     transition-duration: 0.25s;
@@ -119,15 +121,16 @@ header a:active {
 }
 
 .er-line {
-    opacity: 1;
+    opacity: 0.4;
     width: 100%;
     font-family: 'Special Elite', cursive;
-    color: rgba(255, 255, 255, 1);
-    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.3rem;
+    letter-spacing: 1px;
     position: absolute;
     transition-property: all;
-    transition-timing-function: ease-out;
-    transition-duration: 2s;
+    transition-timing-function: ease-in-out;
+    transition-duration: 1.5s;
 }
 
 .er-line p {
@@ -138,9 +141,15 @@ header a:active {
     opacity: 1;
 }
 
-.er-line-fade {
-    opacity: 0;
-    font-size: 0.8rem;
+.er-line-in {
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 1;
+    font-size: 1rem;
+}
+
+.er-line-out {
+    opacity: 0.2;
+    font-size: 0.7rem;
 }
 
 /* -------------------------Waveform */
