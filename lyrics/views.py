@@ -25,7 +25,9 @@ def add_line(request):
             'date': now,
         }
         this_lyric.save()
-        response_data = add_line
+
+        response_data = {'position': int(split_line[0]),
+                         'line': split_line[1]}
 
         return HttpResponse(
             json.dumps(response_data),
