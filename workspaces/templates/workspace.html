@@ -5,12 +5,6 @@
 
 
 
-<div class="er-waveform">
-    <div id="wave-timeline">
-    </div>
-    <div id="waveform">
-    </div>
-</div>
 <div class="er-lyrics-gradient">
 </div>
 <div id="er-current-ms"></div>
@@ -34,100 +28,111 @@
     </div>
 </div>
 <article class="er-controls-wrap">
-    <table>
-        <form action="/lyrics/add/" method="POST" id="er-add-line">
-            {% csrf_token %}
+
+    <div class="er-control-row">
+        <table class="er-edit-row">
             <tr>
-                <td class="er-current-cell">
-                    <input type="text" id="er-line-input"
-                        placeholder="Click to add your lyric and keep playing or hit pause" autocomplete="off">
-                </td>
-                <td class="er-button-cell">
+                <td class="er-cell-left">
+
                     <button class="er-button">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-edit"></i><span class="er-button-label"> Edit Current</span>
                     </button>
                 </td>
+                <td>
+
+                </td>
+                <form action="/lyrics/add/" method="POST" id="er-add-line">
+                    {% csrf_token %}
+                    <td class="er-cell-right">
+                        <button class="er-button">
+                            <i class="fas fa-plus"></i><span class="er-button-label"> Lick Lyric</span>
+                        </button>
+                    </td>
             </tr>
-        </form>
+        </table>
 
-        <tr>
-            <td>
-                <input type="range" min="1" max="100" value="0" class="er-slider-play" id="er-slider-input">
-            </td>
+    </div>
+    <div class="er-control-row">
+        <input type="text" id="er-line-input" placeholder="Click to add your lyric and keep playing or hit pause"
+            autocomplete="off">
+    </div>
 
-        </tr>
+    </form>
 
-        <tr>
-            <td>
-                <table class="er-controls">
-                    <tr>
-                        <td>Play</td>
-                        <td>Stop</td>
-                        <td><span id="er-skip-length"></span> ms</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="er-control-button" id="er-control-play">
-                                <div class="er-control">
-                                    <i class="fas fa-play"></i>
-                                </div>
+
+
+    <div class="er-control-row">
+        <div id="waveform"></div>
+    </div>
+    <div class="er-control-row">
+        <div id="wave-timeline"></div>
+
+    </div>
+
+    <div class="er-control-row">
+        <table class="er-controls">
+            <tr>
+                <td>Play</td>
+                <td>Stop</td>
+                <td><span id="er-skip-length"></span> ms</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="er-control-button" id="er-control-play">
+                        <div class="er-control">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="er-control-button er-control-hide" id="er-control-pause">
+                        <div class="er-control">
+                            <i class="fas fa-pause"></i>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="er-control-button" id="er-control-stop">
+                        <div class="er-control">
+                            <i class="fas fa-stop"></i>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="er-control-button" id="er-control-backward">
+                        <div class="er-control"><i class="fas fa-step-backward"></i>
+                        </div>
+                    </div>
+                    <div class="er-button-doubler">
+                        <div class="er-half-button er-half-top er-control-active" id="er-skip-plus">
+                            <div class="er-control">
+                                <i class="fas fa-plus"></i>
                             </div>
-                            <div class="er-control-button er-control-hide" id="er-control-pause">
-                                <div class="er-control">
-                                    <i class="fas fa-pause"></i>
-                                </div>
+                        </div>
+
+                        <div class="er-half-button er-half-bottom er-control-active" id="er-skip-minus">
+                            <div class="er-control">
+                                <i class="fas fa-minus"></i>
                             </div>
-                        </td>
+                        </div>
+                    </div>
+                    <div class="er-control-button" id="er-control-forward">
+                        <div class="er-control">
+                            <i class="fas fa-step-forward"></i>
 
-                        <td>
-                            <div class="er-control-button" id="er-control-stop">
-                                <div class="er-control">
-                                    <i class="fas fa-stop"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="er-control-button" id="er-control-backward">
-                                <div class="er-control"><i class="fas fa-step-backward"></i>
-                                </div>
-                            </div>
-                            <div class="er-button-doubler">
-                                <div class="er-half-button er-half-top er-control-active" id="er-skip-plus">
-                                    <div class="er-control">
-                                        <i class="fas fa-plus"></i>
-                                    </div>
-                                </div>
+                        </div>
 
-                                <div class="er-half-button er-half-bottom er-control-active" id="er-skip-minus">
-                                    <div class="er-control">
-                                        <i class="fas fa-minus"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="er-control-button" id="er-control-forward">
-                                <div class="er-control">
-                                    <i class="fas fa-step-forward"></i>
-
-                                </div>
-
-                            </div>
-                        </td>
+                    </div>
+                </td>
+                <td class="er-cell-right er-control-time">
+                    <div id="er-current-time">00:00</div>
+                    <div id="er-total-time">--:--</div>
+                </td>
 
 
-                    </tr>
+            </tr>
 
-                </table>
-            </td>
-
-            <td class="er-control-time">
-                <div id="er-current-time">00:00</div>
-                <div id="er-total-time">--:--</div>
-            </td>
-
-        </tr>
-    </table>
-
-
+        </table>
+    </div>
 </article>
 
 
@@ -144,9 +149,9 @@
 <script>
     function waveHeight() {
         if (window.innerWidth < 576) {
-            return 64;
+            return 18;
         } else {
-            return 96;
+            return 24;
         }
     }
 
@@ -158,7 +163,7 @@
         cursorColor: "#FF0000",
         cursorWidth: "5",
         height: waveHeight(),
-        interact: false,
+        interact: true,
         responsive: true,
         plugins: [
             WaveSurfer.timeline.create({

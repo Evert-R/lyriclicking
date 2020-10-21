@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 html {
-    font-size: 16px;
+    font-size: 15px;
 }
 
 body {
-    height: 100vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.8rem;
     font-weight: 300;
@@ -13,6 +12,16 @@ body {
     overflow: hidden;
     margin: 0;
     background-image: url('/static/images/blackboard.jpg');
+}
+
+.er-screen {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+div {
+    box-sizing: border-box;
 }
 
 h1 {
@@ -86,8 +95,7 @@ header a:active {
 .er-lyrics-wrap {
     position: absolute;
     top: 0vh;
-    right: 0;
-    width: 85vw;
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
 }
@@ -101,15 +109,14 @@ header a:active {
 }
 
 .er-current-line {
-    width: 85vw;
+    width: 100vw;
     opacity: 0;
     z-index: 5000;
     position: fixed;
-    right: 0;
     top: 31vh;
     font-family: 'Special Elite', cursive;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 1rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
     transition-property: all;
     transition-timing-function: ease-out;
@@ -125,7 +132,7 @@ header a:active {
     width: 100%;
     font-family: 'Special Elite', cursive;
     color: rgba(255, 255, 255, 0.3);
-    font-size: 1.3rem;
+    font-size: 1rem;
     letter-spacing: 1px;
     position: absolute;
     transition-property: all;
@@ -144,23 +151,27 @@ header a:active {
 .er-line-in {
     color: rgba(255, 255, 255, 0.9);
     opacity: 1;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .er-line-out {
     opacity: 0.2;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
 }
 
 /* -------------------------Waveform */
 
-.er-waveform {
+.er-waveform-old {
     position: absolute;
     left: -35vh;
     top: 35vh;
     transform: rotate(90deg);
     width: 80vh;
     z-index: 3000;
+}
+
+#er-waveform {
+    width: 100%;
 }
 
 #wave-timeline {
@@ -170,21 +181,21 @@ header a:active {
 /* -------------------------Control section */
 
 .er-controls-wrap {
+    width: 100%;
     font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.5);
-    width: 100%;
     position: absolute;
     bottom: 0rem;
-    right: 0;
     z-index: 9000;
+}
+
+.er-control-row {
+    width: 100%;
+    padding: 0.2rem 0.7rem;
 }
 
 .er-controls {
     width: 100%;
-}
-
-.er-controls td {
-    text-align: center;
 }
 
 .er-control-button i {
@@ -350,10 +361,18 @@ td {
     vertical-align: middle;
 }
 
+.er-cell-left {
+    text-align: left;
+}
+
+.er-cell-right {
+    text-align: right;
+}
+
 input[type=text] {
+    box-sizing: border-box;
     height: 1.7rem;
     width: 100%;
-    padding-left: 0.5rem;
     margin-bottom: 0.2rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.7rem;
@@ -403,13 +422,25 @@ button {
     height: 2rem;
     padding: 0rem 0.8rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.9rem;
-    color: rgba(0, 0, 0);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    color: rgba(0, 0, 0, 0.6);
     background-color: rgba(195, 195, 19, 1);
     border-style: solid;
     border-width: 0.1px;
     border-radius: 0.2rem;
     border-color: rgba(0, 0, 0);
+}
+
+button i {
+    font-size: 0.9rem;
+    vertical-align: middle;
+    color: rgba(0, 0, 0);
+}
+
+.er-button-label {
+    display: none;
 }
 
 input[type=range] {
@@ -518,19 +549,34 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 @media(min-width: 576px) {
+    html {
+        font-size: 16px;
+    }
     .er-header {
         width: 80vw;
     }
-    .er-waveform {
+    .er-waveform-old {
         left: -42vh;
         top: 43vh;
         width: 100vh;
     }
+    .er-current-line {
+        font-size: 1rem;
+    }
+    .er-line {
+        font-size: 1.3rem;
+    }
+    .er-line-in {
+        font-size: 1rem;
+    }
+    .er-line-out {
+        font-size: 0.7rem;
+    }
     #wave-timeline {
         display: block;
     }
-    .er-controls-wrap {
-        width: 85vw;
+    .er-control-row {
+        padding: 0.3rem 2rem;
     }
     .er-control-button {
         width: 3rem;
@@ -554,6 +600,9 @@ input[type=range]:focus::-ms-fill-upper {
     }
     .er-half-bottom {
         margin-top: 0.8rem;
+    }
+    .er-button-label {
+        display: inline;
     }
     input[type=text] {
         font-size: 0.7rem;

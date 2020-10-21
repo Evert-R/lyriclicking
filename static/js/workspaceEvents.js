@@ -93,7 +93,9 @@ function addLine() {
         }
     });
 };
-
+wavesurfer.on('seek', function () {
+    repositionLyrics();
+})
 
 
 // ------------------------------------ Position handling
@@ -150,6 +152,8 @@ function gotoPosition(position, callback) {
     callback();
 }
 
+
+
 // ------------------------------------ Time handling
 
 
@@ -194,14 +198,14 @@ function pushPlaceolder() {
 function pushCurrentEditTime() {
     $('#er-line-input').val(getCurrentMs() + ': ');
     $('#er-current-time').html(currentString());
-    $('.er-slider-play').val(getCurrentMs());
+    // $('.er-slider-play').val(getCurrentMs());
 }
 
 // push the current time to all screen items
 function pushCurrentTime() {
     pushPlaceolder();
     $('#er-current-time').html(currentString());
-    $('.er-slider-play').val(getCurrentMs());
+    // $('.er-slider-play').val(getCurrentMs());
 }
 
 // ------------------------------------ Control handling
@@ -214,7 +218,7 @@ function stopPlaying(callback) {
 // ------------------------------------ Execute when wave is loaded
 wavesurfer.on('ready', function () {
     // set slider range to total milliseconds
-    $('#er-slider-input').attr('max', getTotalMs());
+    // $('#er-slider-input').attr('max', getTotalMs());
 
     // set height of the lyrics windows
     $('#er-lyrics').css('height', (getTotalMs() / 7) + 'px');
@@ -247,12 +251,12 @@ wavesurfer.on('ready', function () {
     });
 
     // enable slider function
-    $('#er-slider-input').change(function () {
-        let progress = $('#er-slider-input').val();
-        let range = (1 / getTotalMs());
-        let position = (range * progress);
-        gotoPosition(position, repositionLyrics)
-    })
+    //$('#er-slider-input').change(function () {
+    //    let progress = $('#er-slider-input').val();
+    //    let range = (1 / getTotalMs());
+    //    let position = (range * progress);
+    //    gotoPosition(position, repositionLyrics)
+    //})
 
     // Activate play and forward
     $('#er-control-play').addClass('er-control-active');
@@ -281,7 +285,7 @@ wavesurfer.on('ready', function () {
         $('#er-control-stop').addClass('er-control-blue');
         $('#er-control-backward').removeClass('er-control-active');
         $('#er-control-backward').removeClass('er-hover-yellow');
-        $('.er-slider-play').val(0);
+        // $('.er-slider-play').val(0);
         $('.er-current-line').removeClass('er-line-active');
         stopPlaying(repositionLyrics);
     });
@@ -314,18 +318,18 @@ wavesurfer.on('audioprocess', function () {
             wavesurfer.pause();
         });
 
-        $('.er-slider-play').val(getCurrentMs());
+        // $('.er-slider-play').val(getCurrentMs());
 
 
 
-        $('#er-slider-input').on('mouseenter', function () {
-            $('#er-slider-input').removeClass('er-slider-play');
-        })
+        //$('#er-slider-input').on('mouseenter', function () {
+        //    $('#er-slider-input').removeClass('er-slider-play');
+        //})
 
 
-        $('#er-slider-input').on('mouseleave', function () {
-            $('#er-slider-input').addClass('er-slider-play');
-        })
+        //$('#er-slider-input').on('mouseleave', function () {
+        //    $('#er-slider-input').addClass('er-slider-play');
+        //})
         jsLyricKeys.forEach(pushCurrentLine)
     }
 });
