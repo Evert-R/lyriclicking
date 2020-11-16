@@ -22,7 +22,7 @@ from workspaces.views import work_space
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', work_space, name='work_space'),
+    path('preview/', work_space, name='work_space'),
     path('lyrics/', include('lyrics.urls')),
 ]
 
