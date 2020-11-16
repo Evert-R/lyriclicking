@@ -11,23 +11,28 @@ import datetime
 def add_line(request):
     this_lyric = lyric.objects.first()
     now = str(datetime.datetime.now())
+    prev_position = -1
     if request.method == 'POST':
-        this_line = request.POST.get('new_line')
-        split_line = this_line.split(': ', 2)
-        add_line = {int(split_line[0]): {
-            'line': split_line[1],
-            'user': '1',
-            'date': '',
-        }}
-        this_lyric.lines[int(split_line[0])] = {
-            'line': split_line[1],
+        original_position = request.POST.get('original_position')
+        line = request.POST.get('input_line')
+        position = request.POST.get('input_position')
+
+        if position != original_position:
+            del this_lyric.lines[original_position]
+            prev_position = original_position
+        this_lyric.lines[int(position)] = {
+            'line': line,
             'user': 1,
             'date': now,
         }
         this_lyric.save()
 
-        response_data = {'position': int(split_line[0]),
-                         'line': split_line[1]}
+        response_data = {'position': int(position),
+                         'line': line,
+                         'user': 1,
+                         'date': now,
+                         'prev_position': int(prev_position)
+                         }
 
         return HttpResponse(
             json.dumps(response_data),

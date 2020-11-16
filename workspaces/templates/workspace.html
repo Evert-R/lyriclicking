@@ -1,83 +1,151 @@
 {% extends 'base.html' %} {% load static %} {% load mathfilters %} {% block content %}
-
 {{ lyric.lines|json_script:"js-lyrics" }}
 
 
+<!-- Pre-load animation -->
+<div class="er-over-screen er-show-block" id="er-wait-screen">
+    <div class="er-wait-ani">
+        <h1>Loading wave</h1>
+    </div>
+</div>
 
-
+<!-- Black row for current lyric background -->
 <div class="er-lyrics-gradient">
 </div>
-<div id="er-current-ms"></div>
-<div id="er-current-line">
-    <p>{{value.line}}</p>
-</div>
+
+
+
+<!-- lyrics scroll - top position is lyricposition in ms -->
 <div class="er-lyrics-wrap">
-
-
     <div id="er-lyrics">
-
         {% for key,value in lyric.lines.items %}
         <div class="er-line" style="top:{{key|div:7}}px;" id="er-line-{{key}}">
             <p>{{value.line}}</p>
         </div>
-        <div class="er-current-line" id="er-big-{{key}}">
-            <p>{{value.line}}</p>
-        </div>
-        {% endfor %}
 
+        {% endfor %}
+        <div class="er-current-line" id="er-current-line">
+            <p> </p>
+        </div>
     </div>
+
 </div>
+
+<!-- Control panel at bottom page -->
 <article class="er-controls-wrap">
 
-    <div class="er-control-row">
-        <table class="er-edit-row">
-            <tr>
-                <td class="er-cell-left">
-
-                    <button class="er-button">
-                        <i class="fas fa-edit"></i><span class="er-button-label"> Edit Current</span>
-                    </button>
-                </td>
-                <td>
-
-                </td>
-                <form action="/lyrics/add/" method="POST" id="er-add-line">
-                    {% csrf_token %}
-                    <td class="er-cell-right">
-                        <button class="er-button">
-                            <i class="fas fa-plus"></i><span class="er-button-label"> Lick Lyric</span>
-                        </button>
+    <!-- Edit panels -->
+    <div class="er-control-row er-edit-row">
+        <!-- Edit buttons -->
+        <div class="er-control-big er-edit-wrap">
+            <table>
+                <tr>
+                    <td class="er-cell-center">
+                        <div class="er-edit-button er-hover-green" id="er-edit-wave">
+                            <div class="er-edit-label">SOUNDFILE</div>
+                            <i class="fas fa-wave-square"></i>
+                        </div>
                     </td>
-            </tr>
-        </table>
+                    <td class="er-cell-center">
+                        <div class="er-edit-button er-hover-blue" id="er-edit-comments">
+                            <div class="er-edit-label">BLAH BLAH</div>
+                            <i class="fas fa-comments"></i>
+                        </div>
+                    </td>
+                    <td class="er-cell-center">
+                        <div class="er-edit-button er-hover-red" id="er-edit-current">
+                            <div class="er-edit-label">EDIT LYRIC</div>
+                            <i class="fas fa-edit"></i>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- Active lyric positon display -->
+        <div class="er-control-small er-edit-wrap er-cell-center">
+            <table>
+                <tr>
+                    <td>
+                        <div class="er-display-status">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="er-edit-label">CURRENT LYRIC POSITION</div>
+                        <div id="er-active-position">00:00:000</div>
 
+                    </td>
+                    <td>
+                        <div class="er-display-status">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" id="er-display-position">
+        </div>
+        <!-- Switchable edit screens -->
+        <div class="er-control-big er-edit-wrap" id="er-edit-right">
+            <table>
+                <tr>
+
+
+                    <td class="er-cell-center">
+                        <div class="er-edit-button er-hover-red" id="er-set-endpoint">
+                            <div class="er-edit-label">SET ENDPOINT</div>
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
+    <!-- text input for lyrics and comments -->
+    <div class="er-control-row er-input-row">
+        <form action="/lyrics/add/" method="POST" id="er-add-line">
+            {% csrf_token %}
+            <input type="text" id="er-line-input" placeholder="Click here to lick a lyric while playing or hit pause"
+                autocomplete="off">
+            <button><i class="fas fa-microphone-alt"></i><i class="fas fa-location-arrow"></i></button>
+            <input type="hidden" id="er-input-position">
+            <input type="hidden" id="er-original-position" value="0">
+        </form>
+
+        <div class="er-input-helpers er-hide" id="er-edit-position"></div>
+        <div class="er-input-helpers er-hide" id="er-cancel-input">X</div>
+    </div>
+    <!-- Waveform -->
     <div class="er-control-row">
-        <input type="text" id="er-line-input" placeholder="Click to add your lyric and keep playing or hit pause"
-            autocomplete="off">
+        <div id="wave-timeline"></div>
     </div>
-
-    </form>
-
-
-
+    <!-- Waveform timeline -->
     <div class="er-control-row">
         <div id="waveform"></div>
     </div>
-    <div class="er-control-row">
-        <div id="wave-timeline"></div>
-
-    </div>
-
+    <!-- Transport controls for audio -->
     <div class="er-control-row">
         <table class="er-controls">
             <tr>
-                <td>Play</td>
-                <td>Stop</td>
-                <td><span id="er-skip-length"></span> ms</td>
+                <td>
+                    <div class="er-control-label">STOP</div>
+                    <div class="er-control-label">PLAY</div>
+                </td>
+                <td>
+                    <div class="er-control-label er-skip-status">-<span class="er-skip-length"></span>ms</div>
+                    <div class="er-control-label er-skip-status">RANGE</div>
+                    <div class="er-control-label er-skip-status">+<span class="er-skip-length"></span>ms</div>
+                </td>
+                <td>
+
+                </td>
             </tr>
             <tr>
                 <td>
+                    <div class="er-control-button" id="er-control-stop">
+                        <div class="er-control">
+                            <i class="fas fa-stop"></i>
+                        </div>
+                    </div>
                     <div class="er-control-button" id="er-control-play">
                         <div class="er-control">
                             <i class="fas fa-play"></i>
@@ -89,17 +157,10 @@
                         </div>
                     </div>
                 </td>
-
-                <td>
-                    <div class="er-control-button" id="er-control-stop">
-                        <div class="er-control">
-                            <i class="fas fa-stop"></i>
-                        </div>
-                    </div>
-                </td>
                 <td>
                     <div class="er-control-button" id="er-control-backward">
-                        <div class="er-control"><i class="fas fa-step-backward"></i>
+                        <div class="er-control">
+                            <i class="fas fa-backward"></i>
                         </div>
                     </div>
                     <div class="er-button-doubler">
@@ -117,35 +178,21 @@
                     </div>
                     <div class="er-control-button" id="er-control-forward">
                         <div class="er-control">
-                            <i class="fas fa-step-forward"></i>
-
+                            <i class="fas fa-forward"></i>
                         </div>
-
                     </div>
                 </td>
                 <td class="er-cell-right er-control-time">
-                    <div id="er-current-time">00:00</div>
-                    <div id="er-total-time">--:--</div>
+                    <div id="er-current-time">00:00:000</div>
+                    <div id="er-total-time">--:--:---</div>
                 </td>
-
-
             </tr>
 
         </table>
     </div>
 </article>
 
-
-
-
-
-<div></div>
-
-
-
-
-<!-- Load Amplitude audio player -->
-
+<!-- Load wavesurfer audio player -->
 <script>
     function waveHeight() {
         if (window.innerWidth < 576) {
@@ -155,7 +202,6 @@
         }
     }
 
-
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
         waveColor: '#41c346',
@@ -164,27 +210,24 @@
         cursorWidth: "5",
         height: waveHeight(),
         interact: true,
+        hideScrollbar: true,
         responsive: true,
         plugins: [
             WaveSurfer.timeline.create({
                 container: "#wave-timeline",
-                primaryColor: "rgba(255, 255, 255, 0.7)",
-                secondaryColor: "rgba(255, 255, 255, 0.4)",
-                primaryFontColor: "rgba(255, 255, 255, 0.6)",
-                secondaryFontColor: "rgba(255, 255, 255, 0.3)",
+                primaryColor: "#ffffc970",
+                secondaryColor: "#ffffc970",
+                primaryFontColor: "#ffffc970",
+                secondaryFontColor: "#ffffc970",
+                fontSize: "9",
+                notchPercentHeight: "30"
             })
         ]
     });
     wavesurfer.load('{{ MEDIA_URL }}{{ sound.audio }}');
     console.log(wavesurfer);
 </script>
-
+<!-- Load screen events for workspace -->
 <script src="{% static 'js/workspaceEvents.js' %}"></script>
-
-
-
-
-
-
 
 {% endblock %}

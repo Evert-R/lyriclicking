@@ -20,6 +20,33 @@ body {
     overflow: hidden;
 }
 
+.er-wait-ani {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding-top: 32vh;
+}
+
+.er-over-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    z-index: 6000;
+    background: rgba(0, 0, 0, 0);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 1) 100%);
+}
+
+.er-show-block {
+    display: block;
+}
+
+.er-input-helpers {
+    opacity: 1;
+}
+
 div {
     box-sizing: border-box;
 }
@@ -30,7 +57,7 @@ h1 {
     padding-right: 1rem;
     font-family: 'Audiowide', cursive;
     letter-spacing: 0.2rem;
-    color: rgba(177, 0, 0, 0.9);
+    color: rgba(197, 21, 37);
 }
 
 /* -------------------------header */
@@ -109,13 +136,14 @@ header a:active {
 }
 
 .er-current-line {
+    display: table-cell;
+    text-align: center;
     width: 100vw;
-    opacity: 0;
-    z-index: 5000;
+    opacity: 1;
+    z-index: 3000;
     position: fixed;
-    top: 31vh;
-    font-family: 'Special Elite', cursive;
-    color: rgba(255, 255, 255, 0.85);
+    top: 33vh;
+    color: rgba(209, 255, 211);
     font-size: 0.8rem;
     letter-spacing: 1px;
     transition-property: all;
@@ -130,9 +158,8 @@ header a:active {
 .er-line {
     opacity: 0.4;
     width: 100%;
-    font-family: 'Special Elite', cursive;
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 1rem;
+    color: rgba(211, 100, 110, 0.4);
+    font-size: 0.9rem;
     letter-spacing: 1px;
     position: absolute;
     transition-property: all;
@@ -149,85 +176,313 @@ header a:active {
 }
 
 .er-line-in {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(209, 255, 211);
     opacity: 1;
     font-size: 0.8rem;
 }
 
 .er-line-out {
     opacity: 0.2;
-    font-size: 0.5rem;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.1);
 }
 
-/* -------------------------Waveform */
+/* -------------------------Control Panel */
 
-.er-waveform-old {
+.er-controls-wrap {
+    width: 96%;
+    padding-left: 2%;
+    padding-right: 2%;
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.5);
     position: absolute;
-    left: -35vh;
-    top: 35vh;
-    transform: rotate(90deg);
-    width: 80vh;
+    bottom: 0rem;
     z-index: 3000;
 }
 
-#er-waveform {
+.er-control-row {
+    overflow: hidden;
+    width: 100%;
+    padding: 0.3rem 0;
+}
+
+.er-control-third {
+    width: 33.33%;
+    display: inline-block;
+}
+
+.er-control-small {
+    width: 28%;
+    display: inline-block;
+}
+
+.er-control-big {
+    width: 36%;
+    display: inline-block;
+}
+
+/* -------------------------Edit section */
+
+.er-edit-row {
+    display: flex;
+    opacity: 1;
+    font-size: 0.9rem;
+}
+
+.er-edit-row i {
+    vertical-align: middle;
+    cursor: pointer;
+    color: rgba(195, 195, 19, 1);
+    font-size: 0.9rem;
+}
+
+.er-edit-wrap {
+    overflow: hidden;
+    background-color: rgb(10, 51, 74, 0.3);
+    padding: 0.3rem 1rem;
+    margin-left: 0.2rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+    border-width: 1px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-color: rgba(255, 255, 201, .4);
+    border-width: 1px;
+    border-radius: 0.3rem;
+}
+
+.er-edit-head {
+    width: 100%;
+    margin-bottom: -0.5rem;
+}
+
+.er-edit-red {
+    border-color: rgba(211, 100, 110, 0.9);
+}
+
+.er-edit-blue {
+    border-color: rgb(52, 164, 232);
+}
+
+.er-edit-green {
+    border-color: rgb(65, 195, 70);
+}
+
+.er-edit-button {
+    width: 100%;
+    display: inline-block;
+}
+
+.er-edit-label {
+    font-size: 0.5rem;
+    font-weight: 200;
+    color: rgba(255, 255, 201, 0.4);
+    letter-spacing: 0.15rem;
+    margin-bottom: 0.2rem;
+}
+
+/* -------------------------input section */
+
+input[type=text] {
+    padding-left: 7.5rem;
+    padding-right: 7.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0.5rem;
+    text-align: center;
+    color: rgba(255, 255, 201);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-left-style: solid;
+    border-right-style: solid;
+    border-width: 0.1px;
+    border-radius: 1rem;
+    border-color: rgba(195, 195, 19, 0.4);
+}
+
+input[type=text]:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(195, 195, 19, 0.35);
+    border-width: 0.1rem;
+}
+
+input[type=range] {
+    height: 1rem;
     width: 100%;
 }
 
-#wave-timeline {
-    display: none;
+input::placeholder {
+    color: rgba(181, 181, 158, 0.65);
+}
+
+button {
+    cursor: pointer;
+    box-sizing: border-box;
+    vertical-align: middle;
+    height: 1.83rem;
+    width: 4rem;
+    margin: -0.05rem 0 0.3rem -4.3rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 0 1rem 1rem 0;
+    border-style: none;
+}
+
+button:hover {
+    background-color: rgba(195, 195, 19, 0.5);
+}
+
+button:focus {
+    outline: none;
+}
+
+button i {
+    font-size: 0.8rem;
+    margin-left: 0.4rem;
+    margin-right: 0.4rem;
+    text-align: center;
+    vertical-align: middle;
+    color: rgba(255, 255, 255, 0.1);
+}
+
+.er-active-button button {
+    background-color: rgba(195, 195, 19, 0.8);
+}
+
+.er-active-button button i {
+    color: rgba(0, 0, 0);
+}
+
+.er-active-button button:hover {
+    background-color: rgba(195, 195, 19, 0.95);
+}
+
+.er-active-button button:hover i {
+    font-size: 0.9rem;
+}
+
+.er-input-row {
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: 0.1rem;
+}
+
+.er-input-helpers {
+    position: absolute;
+    top: 4.4rem;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 201, 0.9);
+}
+
+#er-edit-position {
+    left: 4rem;
+}
+
+#er-cancel-input {
+    cursor: pointer;
+    right: 7.7rem;
+}
+
+#er-active-position {
+    padding-left: 0.5rem;
+    color: rgba(211, 100, 110, 0.9);
+    letter-spacing: 0.5rem;
+}
+
+.er-display-status i {
+    color: rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+#er-active-line {
+    overflow: hidden;
+    padding-left: 1rem;
+    white-space: nowrap;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 201, 0.9);
 }
 
 /* -------------------------Control section */
 
-.er-controls-wrap {
-    width: 100%;
-    font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.5);
-    position: absolute;
-    bottom: 0rem;
-    z-index: 9000;
-}
-
-.er-control-row {
-    width: 100%;
-    padding: 0.2rem 0.7rem;
-}
-
 .er-controls {
     width: 100%;
+    letter-spacing: 0.05rem;
+}
+
+.er-controls td {
+    width: 33%;
+}
+
+.er-control-button {
+    overflow: hidden;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0.75rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    cursor: pointer;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.1);
+    border-width: 2px;
+    border-radius: 1.2rem;
+    box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.2);
+}
+
+.er-control-label {
+    font-size: 0.45rem;
+    font-weight: 200;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.15rem;
+    display: inline-block;
+    width: 3.6rem;
+    margin: 0 0.15rem;
+}
+
+.er-control-button:hover, .er-half-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.3);
+}
+
+.er-control-button:active, .er-half-button:active {
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.3);
 }
 
 .er-control-button i {
     color: rgba(0, 0, 0, 0.2);
-    font-size: 1.6rem;
+    font-size: 0.8rem;
 }
 
 .er-half-button {
     overflow: hidden;
     width: 1.8rem;
-    height: 0.7rem;
+    height: 0.8rem;
     margin: 0 0.75rem;
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     border-style: solid;
-    border-color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(0, 0, 0, 0.1);
     border-width: 2px;
-    border-radius: 0.2rem;
-    box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.2);
+    border-radius: 0.8rem;
+    box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.2);
 }
 
 .er-half-top {
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.5rem;
 }
 
 .er-half-bottom {
-    margin-top: 0.65rem;
+    margin-top: 0.5rem;
 }
 
 .er-half-button i {
     color: rgba(0, 0, 0, 0.2);
-    font-size: 0.7rem;
+    font-size: 0.45rem;
 }
 
 .er-button-doubler {
@@ -238,30 +493,7 @@ header a:active {
 .er-skip-ms {
     padding: 0.1rem 0;
     height: 0.8rem;
-    font-size: 0.55rem;
     color: rgba(255, 255, 255, 0.2);
-}
-
-.er-control-button {
-    overflow: hidden;
-    width: 2.4rem;
-    height: 2.4rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    cursor: pointer;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.3);
-    border-width: 2px;
-    border-radius: 0.2rem;
-    box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.2);
-}
-
-.er-control-button:hover, .er-half-button:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-.er-control-button:active, .er-half-button:active {
-    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .er-control {
@@ -292,10 +524,18 @@ header a:active {
     animation: blinker 1s linear infinite;
 }
 
+.er-blink {
+    animation: blinker 0.2s linear infinite;
+}
+
 @keyframes blinker {
     50% {
-        opacity: 0;
+        opacity: 0.3;
     }
+}
+
+.er-red {
+    color: rgba(211, 100, 110, 0.9);
 }
 
 .er-control-green i {
@@ -303,15 +543,19 @@ header a:active {
 }
 
 .er-control-red i {
-    color: rgb(255, 0, 0);
+    color: rgba(211, 100, 110, 0.9);
 }
 
 .er-control-yellow i {
     color: rgba(195, 195, 19, 1);
 }
 
+.er-blue {
+    color: rgb(52, 164, 232);
+}
+
 .er-control-blue i {
-    color: rgb(41, 30, 255);
+    color: rgb(52, 164, 232);
 }
 
 .er-hover-green:hover i {
@@ -319,7 +563,7 @@ header a:active {
 }
 
 .er-hover-red:hover i {
-    color: rgb(255, 0, 0);
+    color: rgba(211, 100, 110, 0.9);
 }
 
 .er-hover-yellow:hover i {
@@ -331,29 +575,31 @@ header a:active {
 }
 
 .er-hover-blue:hover i {
-    color: rgb(41, 30, 255);
+    color: rgb(52, 164, 232);
 }
 
-.er-control-time div {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.7rem;
+.er-hover-grey i:hover {
+    color: rgba(255, 255, 201, 0.6);
 }
 
 #er-current-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+    color: rgba(211, 100, 110, 0.9);
     margin-bottom: 0.3rem;
-    color: rgba(255, 255, 255);
 }
 
 #er-total-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
     margin-top: 0.3rem;
-    color: rgba(150, 150, 150);
+    color: rgba(255, 255, 255, 0.25);
 }
 
 /* -------------------------Form classes */
 
 table {
     width: 100%;
-    border-spacing: 0.4rem;
 }
 
 td {
@@ -369,74 +615,17 @@ td {
     text-align: right;
 }
 
-input[type=text] {
-    box-sizing: border-box;
-    height: 1.7rem;
-    width: 100%;
-    margin-bottom: 0.2rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255);
-    background-color: rgba(0, 0, 0, 0.3);
-    border-style: solid;
-    border-width: 0.1px;
-    border-radius: 0.2rem;
-    border-color: rgba(195, 195, 19, 1);
-}
-
-input[type=range] {
-    height: 1rem;
-    width: 100%;
-}
-
-input::placeholder {
-    color: rgba(255, 255, 255, 0.8)
-}
-
-.er-current-milli {
-    position: fixed;
-    top: 66vh;
-    padding: 0rem 0.8rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.7rem;
-    color: rgba(0, 0, 0);
-    background-color: rgba(158, 180, 255, 1);
-    border-style: solid;
-    border-width: 0.1px;
-    border-radius: 0.2rem;
-    border-color: rgba(0, 0, 0);
-}
-
-.er-current-milli p {
+.er-cell-center {
     text-align: center;
 }
 
-.er-button-cell {
-    width: 3.9rem;
+.er-cell-justify {
+    text-align: justify;
 }
 
-button {
-    cursor: pointer;
-    display: inline-block;
-    box-sizing: border-box;
-    height: 2rem;
-    padding: 0rem 0.8rem;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.1rem;
-    color: rgba(0, 0, 0, 0.6);
-    background-color: rgba(195, 195, 19, 1);
-    border-style: solid;
-    border-width: 0.1px;
-    border-radius: 0.2rem;
-    border-color: rgba(0, 0, 0);
-}
-
-button i {
-    font-size: 0.9rem;
-    vertical-align: middle;
-    color: rgba(0, 0, 0);
+.er-add-cell {
+    width: 2rem;
+    text-align: right;
 }
 
 .er-button-label {
@@ -570,36 +759,30 @@ input[type=range]:focus::-ms-fill-upper {
         font-size: 1rem;
     }
     .er-line-out {
-        font-size: 0.7rem;
-    }
-    #wave-timeline {
-        display: block;
-    }
-    .er-control-row {
-        padding: 0.3rem 2rem;
+        font-size: 0.8rem;
     }
     .er-control-button {
-        width: 3rem;
-        height: 3rem;
+        width: 2.4rem;
+        height: 2.4rem;
     }
     .er-control-button i {
-        font-size: 1.8rem;
+        font-size: 1.1rem;
     }
     .er-button-doubler {
-        height: 3rem;
+        height: 2.4rem;
     }
     .er-half-button {
         width: 2.4rem;
         height: 1rem;
     }
     .er-half-button i {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     .er-half-top {
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.4rem;
     }
     .er-half-bottom {
-        margin-top: 0.8rem;
+        margin-top: 0.4rem;
     }
     .er-button-label {
         display: inline;
@@ -607,4 +790,8 @@ input[type=range]:focus::-ms-fill-upper {
     input[type=text] {
         font-size: 0.7rem;
     }
+}
+
+.er-hide {
+    opacity: 0;
 }

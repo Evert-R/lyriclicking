@@ -1,3 +1,6 @@
+// true when editing a lyric
+let editLyric = false;
+
 // ------------------------------------ Lyrics handling
 
 // This will make the lyrics available in JS
@@ -19,68 +22,81 @@ function sortLyricKeys() {
     jsLyricKeys.sort(function (a, b) {
         return a - b;
     });
+    repositionLyrics();
 }
 
 collectLyricKeys(sortLyricKeys);
 
-console.log(jsLyricKeys);
-// callback: set current position of lyrics after skip or slide
-function repositionLyrics() {
-    $('#er-lyrics').css('top', '-' + (getCurrentMs() / 7) + 'px');
-    $('.er-current-line').removeClass('er-line-active');
-    $('.er-line').removeClass('er-line-in er-line-out');
-    jsLyricKeys.forEach(pushCurrentLine);
-    pushCurrentTime();
-}
 
-// Check what the current lyric-line is and push to screen
-function pushCurrentLine(position, index) {
-    if (getCurrentMs() >= position && getCurrentMs() < jsLyricKeys[index + 1]) {
-        $('#er-big-' + position).addClass('er-line-active');
-        $('#er-big-' + jsLyricKeys[index - 1]).removeClass('er-line-active');
-        $('#er-line-' + jsLyricKeys[index + 1]).addClass('er-line-in');
-        $('#er-line-' + position).addClass('er-line-out');
+
+function addLine(position, line, user, date, callback) {
+    jsLyrics[position] = {
+        'line': line,
+        'user': user,
+        'date': date,
     }
-}
-
-// set fadespeed to duration time till the next line
-function setFadeSpeed(position, index) {
-    let fadeTime = (jsLyricKeys[index + 1]) - position;
-    $('#er-line-' + position).css('transition-duration', (fadeTime / 1000) + 's');
-}
-
-
-function pushAddLine(position) {
-    console.log(position);
-}
-
-function addKey(position, callback) {
     jsLyricKeys.push(position);
+    $('#er-lyrics').append(`
+    <div class="er-line" style="top:${position / 7}px;" id="er-line-${position}">
+    <p>${line}</p>
+    </div>                         
+    `)
+    console.log('key added');
     callback();
 }
 
+function removeLine(position) {
+    const index = jsLyricKeys.indexOf(position);
+    jsLyricKeys.splice(index, 1);
+    delete jsLyrics[position];
+    $('#er-line-' + position).html('');
+    console.log('key removed');
+}
+
+function updateLine(position, line, callback) {
+    let match = false;
+    jsLyricKeys.forEach(function (item, index) {
+        if (parseInt(position) == parseInt(item)) {
+            $('#er-line-' + position + '> p').html(line);
+            match = true;
+            jsLyrics[position].line = line;
+            console.log('lyric updated')
+        }
+    })
+    if (match == false) {
+        return true;
+    }
+    callback();
+}
+
+
+
 // add the line from the input to the database
-function addLine() {
-    console.log("create post is working!") // sanity check
+function inputLine() {
+    console.log($('#er-line-input').val()) // sanity check
+    console.log($('#er-input-position').val()) // sanity check
     $.ajax({
         url: "lyrics/add/", // the endpoint
         type: "POST", // http method
-        data: { new_line: $('#er-line-input').val() }, // data sent with the post request
+        data: {
+            input_line: $('#er-line-input').val(),
+            input_position: $('#er-input-position').val(),
+            original_position: $('#er-original-position').val()
+        }, // data sent with the post request
 
         // handle a successful response
         success: function (json) {
+            lyricEditModeOff();
 
-            $('#er-line-input').val(''); // remove the value from the input
+            if (json.prev_position != -1) {
+                removeLine(json.prev_position);
+            }
 
-            $('#er-lyrics').append(`
-            <div class="er-line" style="top:${json.position / 7}px;" id="er-line-${json.position}">
-            <p>${json.line}</p>
-            </div>
-            <div class="er-current-line" id="er-big-${json.position}">
-            <p>${json.line}</p>
-            </div>            
-            `)
-            addKey(json.position, sortLyricKeys);
+            if (updateLine(json.position, json.line, repositionLyrics)) {
+                addLine(json.position, json.line, json.user, json.date, sortLyricKeys);
+                console.log('Lyrcic added');
+            }
+
             console.log(json.position);
             console.log(json.line); // log the returned json to the console
             console.log("success"); // another sanity check
@@ -93,16 +109,118 @@ function addLine() {
         }
     });
 };
-wavesurfer.on('seek', function () {
-    repositionLyrics();
+
+console.log(jsLyricKeys);
+
+// set fadespeed to duration time till the next line
+function setFadeSpeed(position, index) {
+    let fadeTime = (jsLyricKeys[index + 1]) - position;
+    $('#er-line-' + position).css('transition-duration', (fadeTime / 1000) + 's');
+}
+
+// callback: set current position of lyrics after skip or slide
+function repositionLyrics() {
+    $('#er-lyrics').css('top', '-' + (getCurrentMs() / 7) + 'px');
+    $('.er-current-line').removeClass('er-line-active');
+    $('.er-line').removeClass('er-line-in er-line-out');
+    jsLyricKeys.forEach(pushCurrentLine);
+    pushCurrentTime();
+}
+
+let activePosition = 0;
+let activeLine = '';
+// Check what the current lyric-line is and push to screen
+function pushCurrentLine(position, index) {
+    if (getCurrentMs() >= position && getCurrentMs() < jsLyricKeys[index + 1]) {
+        activePosition = position;
+        activeLine = jsLyrics[position].line;
+
+        $('#er-line-' + jsLyricKeys[index + 1]).addClass('er-line-in');
+        $('#er-line-' + position).addClass('er-line-out');
+        $('#er-current-line').html(jsLyrics[position].line);
+        $('#er-active-line').html(jsLyrics[position].line);
+        $('.er-edit-row').removeClass('er-hide');
+        pushActivePosition(position);
+
+    }
+}
+
+let updateLyric = false;
+
+function pushActivePosition(position) {
+    if (editLyric == false) {
+        $('#er-active-position').html(secondsToString(position / 1000));
+    }
+}
+
+// ------------------------------------ Edit modes
+
+$('#er-edit-current').on('click', function () {
+    if (editLyric == false) {
+        lyricEditMode();
+    } else {
+        lyricEditModeOff();
+    }
 })
+
+$('#er-cancel-input').on('click', function () {
+    lyricEditModeOff();
+})
+
+function lyricEditMode() {
+    editLyric = true;
+    $('#er-line-input').val(activeLine);
+    $('#er-edit-position').html(secondsToString(activePosition / 1000));
+    $('#er-input-position').val(activePosition);
+    $('#er-original-position').val(activePosition);
+    $('#er-edit-current').addClass('er-control-red');
+    $('.er-input-row').addClass('er-active-button');
+    $('.er-input-helpers').removeClass('er-hide');
+    $('#er-line-input').attr('placeholder', '');
+    $('#er-edit-right').addClass('er-edit-red');
+    $('#er-active-position').addClass('er-blink');
+    $('.er-skip-status').addClass('er-red');
+    $('.er-skip-status').addClass('er-blink');
+}
+
+function lyricEditModeOff() {
+    editLyric = false;
+    $('#er-edit-current').removeClass('er-control-red');
+    $('.er-input-row').removeClass('er-active-button');
+    $('#er-line-input').val('');
+    $('#er-edit-position').html('');
+    $('#er-original-position').val('');
+    $('.er-input-helpers').addClass('er-hide');
+    $('#er-edit-right').removeClass('er-edit-red');
+    $('#er-active-position').removeClass('er-blink');
+    $('.er-skip-status').removeClass('er-red');
+    $('.er-skip-status').removeClass('er-blink');
+    pushPlaceholder();
+}
+
+// ------------------------------------ Other Edit Modes
+
+$('#er-edit-comments').on('click', function () {
+    $('#er-edit-right').addClass('er-edit-blue');
+    $('#er-edit-comments').addClass('er-blue');
+})
+
+$('#er-edit-wave').on('click', function () {
+    $('#er-edit-right').addClass('er-edit-green');
+    $('#er-edit-comments').addClass('er-green');
+})
+
 
 
 // ------------------------------------ Position handling
 
+wavesurfer.on('seek', function () {
+    repositionLyrics();
+})
+
 // set default skip length
 let skipLength = 1000;
-$('#er-skip-length').html(skipLength);
+$('.er-skip-length').html(skipLength);
 
 // multiply skip length by 10
 $('#er-skip-plus').on('click', function () {
@@ -115,7 +233,7 @@ $('#er-skip-plus').on('click', function () {
     if (skipLength == 10) {
         $('#er-skip-minus').addClass('er-control-active')
     }
-    $('#er-skip-length').html(skipLength);
+    $('.er-skip-length').html(skipLength);
 })
 
 // divide skiplength with 10
@@ -129,13 +247,13 @@ $('#er-skip-minus').on('click', function () {
     if (skipLength == 10000) {
         $('#er-skip-plus').addClass('er-control-active')
     }
-    $('#er-skip-length').html(skipLength);
+    $('.er-skip-length').html(skipLength);
 })
 
 
 // skipback skiplength in ms
 function skipBack(callback) {
-    wavesurfer.skip(- (skipLength / 1000));
+    wavesurfer.skip(-(skipLength / 1000));
     callback();
 }
 
@@ -145,6 +263,23 @@ function skipForward(callback) {
     callback();
 }
 
+function skipBackEdit() {
+    let position = parseInt($('#er-input-position').val());
+    position = position - skipLength;
+    console.log(position);
+    $('#er-input-position').val(position);
+    $('#er-edit-position').html(secondsToString(position / 1000));
+    $('#er-active-position').html(secondsToString(position / 1000));
+}
+
+function skipForwardEdit() {
+    let position = parseInt($('#er-input-position').val());
+    position = position + skipLength;
+    console.log(position);
+    $('#er-input-position').val(position);
+    $('#er-edit-position').html(secondsToString(position / 1000));
+    $('#er-active-position').html(secondsToString(position / 1000));
+}
 
 // go to selected slider position
 function gotoPosition(position, callback) {
@@ -159,14 +294,16 @@ function gotoPosition(position, callback) {
 
 // return seconds as MM:SS
 function secondsToString(seconds) {
-    let m = Math.floor(seconds % 3600 / 60);
-    let s = Math.floor(seconds % 3600 % 60);
-    return ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2);
+    let totalSec = parseFloat(seconds).toFixed(3);
+    let m = Math.floor(totalSec % 3600 / 60);
+    let s = Math.floor(totalSec % 3600 % 60);
+    let ms = totalSec.slice(-3);
+    return ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2) + ':' + ms;
 }
 
 // return current position as MM:SS
 function currentString() {
-    let currentString = secondsToString(Math.round(wavesurfer.getCurrentTime()));
+    let currentString = secondsToString(wavesurfer.getCurrentTime());
     return currentString;
 }
 
@@ -189,21 +326,15 @@ function pushTotalTime() {
 }
 
 // push the current position in ms to the input placeholder
-function pushPlaceolder() {
-    $('#er-line-input').attr('placeholder', 'Click to add your lyric at ' + getCurrentMs() + ' ms');
-    $('#er-current-ms').html(getCurrentMs());
-}
-
-// push the current position as the value for the input
-function pushCurrentEditTime() {
-    $('#er-line-input').val(getCurrentMs() + ': ');
-    $('#er-current-time').html(currentString());
-    // $('.er-slider-play').val(getCurrentMs());
+function pushPlaceholder() {
+    if (editLyric == false) {
+        $('#er-line-input').attr('placeholder', 'Click here or hit pause to lick a lyric at ' + currentString());
+    }
 }
 
 // push the current time to all screen items
 function pushCurrentTime() {
-    pushPlaceolder();
+    pushPlaceholder();
     $('#er-current-time').html(currentString());
     // $('.er-slider-play').val(getCurrentMs());
 }
@@ -212,14 +343,14 @@ function pushCurrentTime() {
 
 function stopPlaying(callback) {
     wavesurfer.stop();
+    editLyric = false;
     callback();
 }
 
 // ------------------------------------ Execute when wave is loaded
 wavesurfer.on('ready', function () {
-    // set slider range to total milliseconds
-    // $('#er-slider-input').attr('max', getTotalMs());
-
+    $('#er-wait-screen').removeClass('er-show-block');
+    $('#er-wait-ani').addClass('er-hide-block');
     // set height of the lyrics windows
     $('#er-lyrics').css('height', (getTotalMs() / 7) + 'px');
     pushTotalTime();
@@ -228,26 +359,40 @@ wavesurfer.on('ready', function () {
     // Submit post on submit button
     $('#er-add-line').on('submit', function (event) {
         event.preventDefault();
-        console.log("form submitted!")  // sanity check
-        addLine();
+        console.log("form submitted!") // sanity check
+        inputLine();
     });
 
     // on click display current position as line-edit position in the input 
     $('#er-line-input').on('click', function () {
-        if ($('#er-line-input').val() == '') {
-            $('#er-line-input').val(getCurrentMs() + ': ');
+        if ($('#er-line-input').val() == '' && editLyric == false) {
+            lyricEditMode();
+            let position = getCurrentMs();
+            $('#er-input-position').val(position);
+            $('#er-edit-position').html(secondsToString(position / 1000));
         }
     })
 
     // enable button functions
     $('#er-control-backward').on('click', function () {
-        skipBack(repositionLyrics);
+        if (editLyric == false) {
+            skipBack(repositionLyrics);
+        } else {
+            skipBackEdit();
+        }
     });
+
+
 
     $('#er-control-forward').on('click', function () {
         $('#er-control-backward').addClass('er-control-active');
         $('#er-control-backward').addClass('er-hover-yellow');
-        skipForward(repositionLyrics);
+
+        if (editLyric == false) {
+            skipForward(repositionLyrics);
+        } else {
+            skipForwardEdit();
+        }
     });
 
     // enable slider function
@@ -296,7 +441,7 @@ wavesurfer.on('audioprocess', function () {
     if (wavesurfer.isPlaying()) {
         // 
         $('#er-current-time').html(currentString());
-        pushPlaceolder();
+        pushPlaceholder();
         $('#er-lyrics').css('top', '-' + (getCurrentMs() / 7) + 'px');
 
         $('#er-control-backward').addClass('er-control-active');
@@ -333,15 +478,3 @@ wavesurfer.on('audioprocess', function () {
         jsLyricKeys.forEach(pushCurrentLine)
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
