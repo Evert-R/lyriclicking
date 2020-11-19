@@ -232,7 +232,7 @@ header a:active {
 .er-edit-row i {
     vertical-align: middle;
     cursor: pointer;
-    color: rgba(195, 195, 19, 1);
+    color: rgba(255, 255, 255, 0.1);
     font-size: 0.9rem;
 }
 

@@ -17,7 +17,7 @@ def add_line(request):
         line = request.POST.get('input_line')
         position = request.POST.get('input_position')
 
-        if position != original_position:
+        if position != original_position and int(original_position) != -1:
             del this_lyric.lines[original_position]
             prev_position = original_position
         this_lyric.lines[int(position)] = {

@@ -167,6 +167,21 @@ $('#er-cancel-input').on('click', function () {
     lyricEditModeOff();
 })
 
+function lyricAddMode() {
+    editLyric = true;
+    let position = getCurrentMs();
+    $('#er-active-position').html(secondsToString(position / 1000));
+    $('#er-active-position').addClass('er-blink');
+    $('#er-input-position').val(position);
+    $('#er-edit-position').html(secondsToString(position / 1000));
+    $('#er-line-input').attr('placeholder', '');
+    $('.er-input-helpers').removeClass('er-hide');
+    $('#er-edit-current').addClass('er-control-red');
+    $('.er-input-row').addClass('er-active-button');
+    $('.er-skip-status').addClass('er-red');
+    $('.er-skip-status').addClass('er-blink');
+}
+
 function lyricEditMode() {
     editLyric = true;
     $('#er-line-input').val(activeLine);
@@ -196,6 +211,7 @@ function lyricEditModeOff() {
     $('.er-skip-status').removeClass('er-red');
     $('.er-skip-status').removeClass('er-blink');
     pushPlaceholder();
+    repositionLyrics();
 }
 
 // ------------------------------------ Other Edit Modes
@@ -366,10 +382,8 @@ wavesurfer.on('ready', function () {
     // on click display current position as line-edit position in the input 
     $('#er-line-input').on('click', function () {
         if ($('#er-line-input').val() == '' && editLyric == false) {
-            lyricEditMode();
-            let position = getCurrentMs();
-            $('#er-input-position').val(position);
-            $('#er-edit-position').html(secondsToString(position / 1000));
+            lyricAddMode();
+
         }
     })
 
