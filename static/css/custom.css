@@ -231,8 +231,7 @@ header a:active {
 
 .er-edit-row i {
     vertical-align: middle;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.1);
+    color: rgba(195, 195, 19, 1);
     font-size: 0.9rem;
 }
 
@@ -269,6 +268,7 @@ header a:active {
 }
 
 .er-edit-button {
+    cursor: pointer;
     width: 100%;
     display: inline-block;
 }
@@ -556,6 +556,10 @@ button i {
 
 .er-control-blue i {
     color: rgb(52, 164, 232);
+}
+
+.er-control-dark i {
+    color: rgba(255, 255, 201, .2);
 }
 
 .er-hover-green:hover i {
