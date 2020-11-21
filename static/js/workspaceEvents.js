@@ -204,7 +204,7 @@ function lyricEditModeOff() {
     $('.er-input-row').removeClass('er-active-button');
     $('#er-line-input').val('');
     $('#er-edit-position').html('');
-    $('#er-original-position').val('');
+    $('#er-original-position').val('-1');
     $('.er-input-helpers').addClass('er-hide');
     $('#er-edit-right').removeClass('er-edit-red');
     $('#er-active-position').removeClass('er-blink');
