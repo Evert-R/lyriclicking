@@ -6,7 +6,7 @@ This is a work in progress and at this moment far from finished.
 
 ##### Deployed preview version:
 - [Lyric Licking](https://www.lyriclicking.nl)
-
+    - Running on Ubuntu server on a Raspberry pi4 with gunicorn and nginx
 
 ## Project purpose
 Lyric licking, referring to a lick from a guitarist, is designed to provide a private workspace for vocalists to write lyrics together for a music track and have a discussion about each line.  
@@ -39,8 +39,6 @@ Lyric licking, referring to a lick from a guitarist, is designed to provide a pr
 }}
 ```
 
-
-## Technologies Used
 ## Technologies Used
 - [VSCode](https://code.visualstudio.com)
   - Code Editor
