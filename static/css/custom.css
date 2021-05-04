@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('db.onlinewebfonts.com/c/233131eb5b5e4a930cbdfb07008a09e1?family=LCD');
+@font-face {
+    font-family: "LCD";
+    src: url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.eot");
+    src: url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.woff") format("woff"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.svg#LCD") format("svg");
+}
+
 html {
     font-size: 15px;
 }
@@ -194,7 +201,6 @@ header a:active {
     padding-left: 2%;
     padding-right: 2%;
     font-size: 0.5rem;
-    color: rgba(255, 255, 255, 0.5);
     position: absolute;
     bottom: 0rem;
     z-index: 3000;
@@ -231,12 +237,12 @@ header a:active {
 
 .er-edit-row i {
     vertical-align: middle;
-    color: rgba(195, 195, 19, 1);
     font-size: 0.9rem;
 }
 
 .er-edit-wrap {
     overflow: hidden;
+    height: 3rem;
     background-color: rgb(10, 51, 74, 0.3);
     padding: 0.3rem 1rem;
     margin-left: 0.2rem;
@@ -250,6 +256,68 @@ header a:active {
     border-radius: 0.3rem;
 }
 
+.er-edit-wrap i {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.er-edit-wrap table {
+    height: 2.2rem;
+}
+
+.er-display {
+    font-family: 'LCD';
+    font-weight: 300;
+    font-size: 1.1rem;
+    letter-spacing: 0.1rem;
+    color: rgba(255, 255, 201, 0.6);
+    border-radius: 0.3rem;
+}
+
+.er-display i {
+    font-size: 0.95rem;
+    transition-property: color;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.1s;
+}
+
+#er-confirm, #er-lick, #er-cancel {
+    width: 2.4rem;
+}
+
+#er-log {
+    width: 100%;
+}
+
+.er-log-wrap {
+    max-height: 25rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.1rem;
+    color: rgba(255, 255, 201, 0.5);
+    padding: 0.3rem 1rem;
+    margin-left: 0.2rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
+}
+
+.er-edit-table td {
+    width: 25%;
+}
+
+.er-edit-right {
+    height: 0%;
+    overflow: hidden;
+}
+
+.er-edit-right span {
+    color: rgba(255, 255, 201, 0.9);
+    font-size: 0.4rem;
+    letter-spacing: 0.04;
+}
+
+.er-edit-slide {
+    height: unset;
+}
+
 .er-edit-head {
     width: 100%;
     margin-bottom: -0.5rem;
@@ -257,6 +325,10 @@ header a:active {
 
 .er-edit-red {
     border-color: rgba(211, 100, 110, 0.9);
+}
+
+.er-edit-yellow {
+    border-color: rgba(195, 195, 19, 1);
 }
 
 .er-edit-blue {
@@ -268,15 +340,20 @@ header a:active {
 }
 
 .er-edit-button {
-    cursor: pointer;
-    width: 100%;
+    opacity: 1;
     display: inline-block;
+}
+
+.er-edit-button i {
+    transition-property: color;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.1s;
 }
 
 .er-edit-label {
     font-size: 0.5rem;
     font-weight: 200;
-    color: rgba(255, 255, 201, 0.4);
+    color: rgba(255, 255, 201, 0.6);
     letter-spacing: 0.15rem;
     margin-bottom: 0.2rem;
 }
@@ -294,11 +371,24 @@ input[type=text] {
     text-align: center;
     color: rgba(255, 255, 201);
     background-color: rgba(0, 0, 0, 0.3);
-    border-left-style: solid;
-    border-right-style: solid;
-    border-width: 0.1px;
-    border-radius: 1rem;
-    border-color: rgba(195, 195, 19, 0.4);
+    border-width: 1px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: none;
+    border-right-style: none;
+    border-width: 1px;
+    border-radius: 0.3rem;
+    border-color: rgba(255, 255, 201, .4);
+}
+
+.er-input-red input[type=text] {
+    border-color: rgba(211, 100, 110, 0.9);
+    z-index: 100;
+}
+
+.er-input-yellow input[type=text] {
+    border-color: rgba(195, 195, 19, 1);
+    z-index: 100;
 }
 
 input[type=text]:focus {
@@ -329,12 +419,8 @@ button {
     font-weight: 600;
     color: rgba(0, 0, 0, 0.6);
     background-color: rgba(0, 0, 0, 0);
-    border-radius: 0 1rem 1rem 0;
+    border-radius: 0 0.3rem 0.3rem 0;
     border-style: none;
-}
-
-button:hover {
-    background-color: rgba(195, 195, 19, 0.5);
 }
 
 button:focus {
@@ -350,16 +436,12 @@ button i {
     color: rgba(255, 255, 255, 0.1);
 }
 
-.er-active-button button {
-    background-color: rgba(195, 195, 19, 0.8);
-}
-
 .er-active-button button i {
-    color: rgba(0, 0, 0);
+    color: rgba(195, 195, 19, 0.8);
 }
 
-.er-active-button button:hover {
-    background-color: rgba(195, 195, 19, 0.95);
+.er-active-button button:hover i {
+    color: rgba(195, 195, 19, 0.95);
 }
 
 .er-active-button button:hover i {
@@ -370,33 +452,29 @@ button i {
     white-space: nowrap;
     overflow: hidden;
     letter-spacing: 0.1rem;
+    padding-bottom: 0;
 }
 
 .er-input-helpers {
     position: absolute;
-    top: 4.4rem;
+    bottom: 9.75rem;
     font-size: 0.6rem;
     color: rgba(255, 255, 201, 0.9);
 }
 
 #er-edit-position {
-    left: 4rem;
+    left: 3rem;
 }
 
 #er-cancel-input {
     cursor: pointer;
-    right: 7.7rem;
+    right: 6.7rem;
 }
 
-#er-active-position {
+.er-position-display {
     padding-left: 0.5rem;
-    color: rgba(211, 100, 110, 0.9);
+    color: rgba(255, 255, 201, 0.2);
     letter-spacing: 0.5rem;
-}
-
-.er-display-status i {
-    color: rgba(255, 255, 255, 0.1);
-    font-size: 0.9rem;
 }
 
 #er-active-line {
@@ -414,18 +492,104 @@ button i {
     letter-spacing: 0.05rem;
 }
 
-.er-controls td {
-    width: 33%;
+.er-audio-row {
+    padding-top: 0.2rem;
+}
+
+.er-audio-row table {
+    border-spacing: 0px;
+}
+
+.er-half-td {
+    width: 16%;
+}
+
+.er-small-td {
+    width: 7%;
+}
+
+.er-big-td {
+    width: 86%;
+}
+
+.er-group-wrap {
+    overflow: hidden;
+    display: inline-block;
+    width: unset;
+    padding: 0 1rem;
+    background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(35, 35, 36, 0.7) 100%);
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgba(255, 255, 201, 0.125);
+    border-width: 0.01px;
+    border-radius: 6rem;
+    box-shadow: 3px 3px 1px rgba(56, 58, 57, 0.3);
+}
+
+.er-group-control {
+    margin: 0;
+    padding: 0;
+    width: 4.8rem;
+    display: inline-block;
+}
+
+.er-group-divider {
+    margin: 0 0.8em;
+    padding: 0;
+    width: 0.2rem;
+    height: 5.2rem;
+    display: inline-block;
+    background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(70, 72, 71, 1) 10%, rgba(70, 72, 71, 0.9) 66%, rgba(35, 35, 36, 0) 100%);
+    border-left-style: dotted;
+    border-right-style: dotted;
+    border-color: rgba(35, 35, 36, 0.3);
+    border-width: 0.01px;
+}
+
+.er-group-space {
+    margin: 0;
+    padding: 0;
+    width: 0.8rem;
+    height: 5.2rem;
+    display: inline-block;
+}
+
+.er-group-space2 {
+    margin: 0 0rem;
+    padding: 0;
+    width: 0rem;
+    height: 5.2rem;
+    display: inline-block;
+    background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(35, 35, 36, 0.2) 33%, rgba(35, 35, 36, 0.3) 66%, rgba(35, 35, 36, 0) 100%);
+    border-left-style: dotted;
+    border-right-style: dotted;
+    border-color: rgba(35, 35, 36, 0.3);
+    border-width: 0.01px;
+}
+
+.er-skip-border {
+    border-bottom-style: solid;
+    border-color: rgba(255, 255, 201, 0.08);
+    border-width: 0.01px;
+}
+
+.er-skip-bottom {
+    border-bottom-style: solid;
+    border-color: rgba(255, 255, 201, 0.08);
+    border-width: 0.01px;
+}
+
+.er-skip-line {
+    color: rgba(255, 255, 201, 0.08);
 }
 
 .er-control-button {
     overflow: hidden;
     width: 2rem;
     height: 2rem;
-    margin: 0 0.75rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    cursor: pointer;
+    margin: 0.3rem auto;
+    background-color: rgba(0, 0, 0, 0.3);
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.1);
     border-width: 2px;
@@ -434,17 +598,25 @@ button i {
 }
 
 .er-control-label {
+    overflow: hidden;
+    height: 0.8rem;
+    margin: 0.3rem auto;
     font-size: 0.45rem;
-    font-weight: 200;
-    color: rgba(255, 255, 255, 0.45);
+    font-weight: 400;
+    color: rgba(255, 255, 201, 0.6);
     letter-spacing: 0.15rem;
-    display: inline-block;
-    width: 3.6rem;
-    margin: 0 0.15rem;
+    width: 4.8rem;
+    padding: 0.1rem 0rem;
+}
+
+.er-control-field {
+    overflow: hidden;
+    border-radius: 0.45rem;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .er-control-button:hover, .er-half-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.26);
     box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.3);
 }
 
@@ -462,7 +634,7 @@ button i {
     overflow: hidden;
     width: 1.8rem;
     height: 0.8rem;
-    margin: 0 0.75rem;
+    margin: 0.3rem auto;
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     border-style: solid;
@@ -487,7 +659,6 @@ button i {
 
 .er-button-doubler {
     height: 2.4rem;
-    display: inline-block;
 }
 
 .er-skip-ms {
@@ -502,6 +673,7 @@ button i {
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 1;
+    cursor: pointer;
     overflow: hidden;
     transition-property: all;
     transition-duration: 0.4;
@@ -516,8 +688,21 @@ button i {
     color: rgba(255, 255, 255, 0.7);
 }
 
+.er-control-purple i {
+    color: rgba(171, 0, 255);
+}
+
+.er-control-purple i {
+    color: rgba(171, 0, 255);
+}
+
 .er-control-active i {
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(213, 186, 255, 1);
+    cursor: pointer;
+}
+
+.er-active {
+    color: rgba(213, 186, 255, 0.8);
 }
 
 .er-control-blink i {
@@ -542,6 +727,10 @@ button i {
     color: rgb(65, 195, 70);
 }
 
+.er-green {
+    color: rgb(65, 195, 70);
+}
+
 .er-control-red i {
     color: rgba(211, 100, 110, 0.9);
 }
@@ -550,12 +739,46 @@ button i {
     color: rgba(195, 195, 19, 1);
 }
 
+.er-yellow {
+    color: rgba(195, 195, 19, 1);
+}
+
+.er-dark {
+    color: rgba(255, 255, 201, 0.2);
+}
+
 .er-blue {
-    color: rgb(52, 164, 232);
+    color: rgb(55, 139, 236);
 }
 
 .er-control-blue i {
-    color: rgb(52, 164, 232);
+    color: rgb(55, 139, 236);
+}
+
+.er-control-hya {
+    color: rgb(136, 0, 255);
+}
+
+.er-control-hya i {
+    color: rgb(136, 0, 255);
+}
+
+.er-hover-hya:hover i {
+    color: rgb(136, 0, 255);
+    cursor: pointer;
+}
+
+.er-control-purple i {
+    color: rgba(171, 0, 255);
+}
+
+.er-hover-purple:hover i {
+    color: rgba(171, 0, 255);
+    cursor: pointer;
+}
+
+.er-purple {
+    color: rgba(171, 0, 255);
 }
 
 .er-control-dark i {
@@ -564,26 +787,32 @@ button i {
 
 .er-hover-green:hover i {
     color: rgb(65, 195, 70);
+    cursor: pointer;
 }
 
 .er-hover-red:hover i {
     color: rgba(211, 100, 110, 0.9);
+    cursor: pointer;
 }
 
 .er-hover-yellow:hover i {
     color: rgba(195, 195, 19, 1);
+    cursor: pointer;
 }
 
-.er-hover-dark:hover {
-    opacity: 50%;
+.er-hover-dark:hover i {
+    color: rgba(255, 255, 201, 0.2);
+    cursor: pointer;
 }
 
 .er-hover-blue:hover i {
-    color: rgb(52, 164, 232);
+    color: rgb(55, 139, 236);
+    cursor: pointer;
 }
 
 .er-hover-grey i:hover {
     color: rgba(255, 255, 201, 0.6);
+    cursor: pointer;
 }
 
 #er-current-time {
@@ -630,6 +859,16 @@ td {
 .er-add-cell {
     width: 2rem;
     text-align: right;
+}
+
+.er-log-cell {}
+
+.er-log-cell span {
+    color: rgba(255, 255, 201, 0.5);
+    font-size: 0.65rem;
+    font-weight: 100;
+    letter-spacing: 0.05rem;
+    line-height: 1.8rem;
 }
 
 .er-button-label {

@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 import json
 from lyrics.models import lyric
 import datetime
@@ -8,38 +9,70 @@ import datetime
 
 
 @csrf_exempt
-def add_line(request):
+@require_POST
+def lick_lyric(request):
+    """
+    lick a new lyric to the rhyme
+    """
     this_lyric = lyric.objects.first()
     now = str(datetime.datetime.now())
-    prev_position = -1
-    if request.method == 'POST':
-        original_position = request.POST.get('original_position')
-        line = request.POST.get('input_line')
-        position = request.POST.get('input_position')
 
-        if position != original_position and int(original_position) != -1:
-            del this_lyric.lines[original_position]
-            prev_position = original_position
-        this_lyric.lines[int(position)] = {
-            'line': line,
-            'user': 1,
-            'date': now,
-        }
+    input_position = request.POST.get('input_position')
+    input_lyric = request.POST.get('input_lyric')
+    input_endpoint = request.POST.get('input_endpoint')
+    original_position = request.POST.get('original_position')
+
+    if input_position != original_position and original_position != '-1':
+        old_lyric = this_lyric.lines[original_position]
+        this_lyric.lines[input_position] = old_lyric
+        del this_lyric.lines[original_position]
+
+    this_lyric.lines[input_position] = {
+        'line': input_lyric,
+        'endpoint': input_endpoint,
+        'user': 1,
+        'date': now,
+    }
+    this_lyric.save()
+    return HttpResponse(status=200)
+
+
+@csrf_exempt
+def delete_line(request):
+    """
+    delete a line from the lyric
+    """
+    this_lyric = lyric.objects.first()
+    position = request.POST.get('position')
+    del this_lyric.lines[position]
+    this_lyric.save()
+    return HttpResponse(status=200)
+
+
+@csrf_exempt
+def set_endpoint(request):
+    """
+    set endpoint for a line
+    """
+    this_lyric = lyric.objects.first()
+    position = request.POST.get('position')
+    endpoint = request.POST.get('endpoint')
+    action = request.POST.get('action')
+    if action == 'set':
+        this_lyric.lines[position]['endpoint'] = endpoint
         this_lyric.save()
-
-        response_data = {'position': int(position),
-                         'line': line,
-                         'user': 1,
-                         'date': now,
-                         'prev_position': int(prev_position)
+        response_data = {'position': position,
+                         'endpoint': endpoint
                          }
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
+    elif action == 'unset':
+        this_lyric.lines[position]['endpoint'] = position
+        this_lyric.save()
+        response_data = {'position': position,
+                         'endpoint': -1
+                         }
     else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+        response_data = {'error': 'Action not recognized'}
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json"
+    )

@@ -4,5 +4,7 @@ from . import views
 
 app_name = 'lyrics'
 urlpatterns = [
-    path('add/', views.add_line, name='add_line'),
+    path('lick/', views.lick_lyric, name='lick_lyric'),
+    path('delete/', views.delete_line, name='delete_line'),
+    path('setendpoint/', views.set_endpoint, name='set_endpoint'),
 ]
