@@ -327,19 +327,19 @@ function pushCurrentLine(position, index) {
     }
     if (index == 0) {
         $('#er-control-previous').removeClass('er-control-active');
-        $('#er-control-previous').removeClass('er-hover-purple');
+        $('#er-control-previous').removeClass('er-hover-yellow');
     }
     if (index > 0) {
         $('#er-control-previous').addClass('er-control-active');
-        $('#er-control-previous').addClass('er-hover-purple');
+        $('#er-control-previous').addClass('er-hover-yellow');
     }
     if (index == jsLyricKeys.length - 1) {
         $('#er-control-next').removeClass('er-control-active');
-        $('#er-control-next').removeClass('er-hover-purple');
+        $('#er-control-next').removeClass('er-hover-yellow');
     }
     if (index < jsLyricKeys.length - 1) {
         $('#er-control-next').addClass('er-control-active');
-        $('#er-control-next').addClass('er-hover-purple');
+        $('#er-control-next').addClass('er-hover-yellow');
     }
 }
 
@@ -934,10 +934,10 @@ function flashSkipButton(id) {
 
 function flashNextPrevButton(id) {
     console.log(id);
-    $(id).addClass('er-control-purple');
+    $(id).addClass('er-control-yellow');
     $(id).addClass('er-blink');
     setTimeout(function () {
-        $(id).removeClass('er-control-purple');
+        $(id).removeClass('er-control-yellow');
         $(id).removeClass('er-blink');
     }, 150);
 }
@@ -1113,10 +1113,10 @@ function pushInitialMode() {
     $('#er-control-forward').addClass('er-hover-purple');
 
     $('#er-control-previous').removeClass('er-control-active');
-    $('#er-control-previous').removeClass('er-hover-purple');
+    $('#er-control-previous').removeClass('er-hover-yellow');
 
     $('#er-control-next').addClass('er-control-active');
-    $('#er-control-next').addClass('er-hover-purple');
+    $('#er-control-next').addClass('er-hover-yellow');
 
 
     $('#er-control-stop').addClass('er-control-blue');
