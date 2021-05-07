@@ -102,19 +102,20 @@ function addLyric(position, endpoint, line, user, date, callback) {
 
 // Delete a lyric from database
 function deleteLyric(position) {
-    removeLyric(position, repositionLyrics); // delete local
+
     let postData = {
         'position': position
     }
     let url = '/lyrics/delete/';
     $.post(url, postData).done();
-    confirmModeOff();
+    initialEditMode();
     pushDisplay('LYRIC DELETED');
+    removeLyric(position, repositionLyrics); // delete local
 }
 
 // delete lyric local
 function removeLyric(position, callback) {
-    const index = jsLyricKeys.indexOf(position);
+    const index = jsLyricKeys.indexOf(parseInt(position));
     jsLyricKeys.splice(index, 1);
     delete jsLyrics[position];
     $('#er-line-' + position).html('');
