@@ -35,16 +35,52 @@
 <body>
 
     <header>
+        <a href="/" title="Lyriclicking">
+            <div class="er-logo">
+                LyriCLicking
+            </div>
+        </a>
         <nav class="er-header">
             <!-- Header / desktop menu -->
+
+
+            <div class="er-menu-item" id="er-menu-account">
+                NEW RHYME
+            </div>
+            <a href="/" title="Lyric licker">
+                <div class="er-menu-item" id="er-menu-new">
+                    LYRIC LICKER
+                </div>
+            </a>
+            <a href="{% url 'accounts:register_user' %}?next={{ request.path|urlencode }}" title="Create account">
+                <div class="er-menu-item" id="er-menu-account">
+                    REGISTER
+                </div>
+            </a>
+            <a href="{% url 'accounts:log_in' %}?next={{ request.path|urlencode }}" title="Log in to use the shop">
+                <div class="er-menu-item" id="er-menu-logout">
+
+                    LOGIN
+
+                </div>
+            </a>
+            <a href="{% url 'accounts:log_out' %}?next={{ request.path|urlencode }}" title="Log in to use the shop">
+                <div class="er-menu-item" id="er-menu-logout">
+
+                    LOGOUT
+
+                </div>
+            </a>
             <div>
-                <h1 class="text-center">LyriCLicking</h1>
+
             </div>
         </nav>
     </header>
 
     <section class="er-screen">
-
+        <!-- Black row for current lyric background -->
+        <div class="er-lyrics-gradient">
+        </div>
         <!-- Templates content -->
         {% block content %} {% endblock %}
 
