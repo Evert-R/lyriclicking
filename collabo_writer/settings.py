@@ -53,10 +53,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'mathfilters',
     'sounds',
-    'workspaces',
-    'lyrics'
+    'lyriclicker',
+    'lyrics',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -153,6 +155,8 @@ if os.environ.get('DEVELOPMENT'):
     ]
 else:
     STATIC_ROOT = BASE_DIR / "static/"
+
+CRISPY_TEMPLATE_PACK = 'uni_form'
 
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 #SECURE_SSL_REDIRECT = True
