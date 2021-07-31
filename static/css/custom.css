@@ -1,24 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+/* 
 @import url('db.onlinewebfonts.com/c/233131eb5b5e4a930cbdfb07008a09e1?family=LCD');
 @font-face {
     font-family: "LCD";
     src: url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.eot");
     src: url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.woff") format("woff"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/233131eb5b5e4a930cbdfb07008a09e1.svg#LCD") format("svg");
 }
+*/
 
 html {
-    font-size: 15px;
+    font-size: 16px;
 }
 
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.8rem;
     font-weight: 300;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 201, 0.9);
     overflow: hidden;
     margin: 0;
     background-image: url('/static/images/blackboard.jpg');
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+    cursor: pointer;
 }
 
 .er-screen {
@@ -67,15 +75,42 @@ h1 {
     color: rgba(197, 21, 37);
 }
 
+/* -------------------------Wraps (locations) */
+
+#er-input-wrap {
+    bottom: 0rem;
+}
+
+#er-panels-wrap {
+    top: 2.9rem;
+    bottom: unset;
+    z-index: 5000;
+}
+
+#er-waveform-wrap {
+    z-index: 6000;
+    top: 22rem;
+    bottom: unset;
+}
+
+#er-controls-wrap {
+    z-index: 5000;
+    top: 7.5rem;
+}
+
+.er-edit-button {
+    z-index: 10000;
+}
+
 /* -------------------------header */
 
 .er-header {
-    position: fixed;
-    top: 0;
+    position: absolute;
+    height: 3.2rem;
+    top: 0rem;
     right: 0;
     width: 100vw;
-    height: 10vh;
-    border-bottom-style: solid;
+    z-index: 5000;
     border-width: 0.1px;
     border-color: rgba(255, 255, 255, 0.3);
 }
@@ -95,6 +130,33 @@ header a:active {
     text-decoration: none;
 }
 
+.er-logo {
+    position: fixed;
+    top: 0.6rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    text-align: right;
+    font-family: 'Audiowide', cursive;
+    font-weight: 600;
+    letter-spacing: 0.2rem;
+    color: rgba(197, 21, 37);
+}
+
+nav {
+    display: flex;
+    align-items: flex-end;
+}
+
+nav div {
+    align-self: flex-end;
+}
+
+.er-menu-item {
+    margin: 0.3rem 1rem;
+    font-size: 0.6rem;
+    display: none;
+}
+
 .er-mobile-menu {
     position: fixed;
     bottom: 0;
@@ -111,6 +173,60 @@ header a:active {
 
 .er-mobile-menu p i {
     font-size: 1.5rem;
+}
+
+.er-site-wrap {
+    max-width: 50%;
+    padding-left: 2%;
+    padding-right: 2%;
+    font-size: 0.5rem;
+    position: absolute;
+    right: 0;
+    top: 4.8rem;
+    z-index: 3000;
+    overflow: hidden;
+    background-color: rgb(10, 51, 74, 0.3);
+    padding: 0.3rem 1rem;
+    vertical-align: middle;
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-color: rgba(255, 255, 201, .4);
+    border-width: 1px;
+    border-radius: 0.3rem;
+}
+
+.er-form-wrap div {
+    display: block;
+}
+
+.er-form-wrap {
+    width: 20rem;
+}
+
+.er-form-wrap input[type=text], input[type=password] {
+    display: block;
+}
+
+.er-form-wrap label {
+    display: table-cell;
+    text-align: left;
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 201, 0.9);
+}
+
+.buttonHolder {
+    display: table-cell;
+    text-align: right;
+    padding: 0.5rem 0.3rem;
+}
+
+.buttonHolder input {
+    padding: 0.4rem 0.6rem;
+    background-color: unset;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 201, 0.9);
 }
 
 /* -------------------------Lyrics field */
@@ -147,7 +263,7 @@ header a:active {
     text-align: center;
     width: 100vw;
     opacity: 1;
-    z-index: 3000;
+    z-index: 4000;
     position: fixed;
     top: 33vh;
     color: rgba(209, 255, 211);
@@ -196,30 +312,28 @@ header a:active {
 
 /* -------------------------Control Panel */
 
-.er-controls-wrap {
-    width: 96%;
-    padding-left: 2%;
-    padding-right: 2%;
-    font-size: 0.5rem;
+.er-wrap {
     position: absolute;
-    bottom: 0rem;
-    z-index: 3000;
+    left: 0;
+    width: 100vw;
+}
+
+#wave-timeline {
+    display: none;
 }
 
 .er-control-row {
     overflow: hidden;
     width: 100%;
     padding: 0.3rem 0;
-}
-
-.er-control-third {
-    width: 33.33%;
-    display: inline-block;
+    text-align: center;
 }
 
 .er-control-small {
     width: 28%;
     display: inline-block;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
 }
 
 .er-control-big {
@@ -240,28 +354,85 @@ header a:active {
     font-size: 0.9rem;
 }
 
+#er-edit-wrap {
+    display: inline-block;
+}
+
+#er-position-wrap {
+    width: 100vw;
+}
+
+#er-display-wrap {
+    display: inline-block;
+}
+
 .er-edit-wrap {
     overflow: hidden;
+    width: 100%;
     height: 3rem;
     background-color: rgb(10, 51, 74, 0.3);
     padding: 0.3rem 1rem;
-    margin-left: 0.2rem;
-    margin-right: 0.3rem;
     vertical-align: middle;
     border-width: 1px;
+    border-top-style: none;
     border-top-style: solid;
     border-bottom-style: solid;
     border-color: rgba(255, 255, 201, .4);
     border-width: 1px;
-    border-radius: 0.3rem;
 }
+
+#er-display-wrap {
+    width: 100vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#er-message-display {
+    display: none;
+}
+
+#er-edit-wave {
+    position: absolute;
+    left: 5vw;
+}
+
+#er-edit-comments {
+    position: absolute;
+    left: 14vw;
+}
+
+#er-edit-current {
+    position: absolute;
+    left: unset;
+    right: 14vw;
+}
+
+#er-delete-current {
+    position: absolute;
+    left: unset;
+    right: 5vw;
+}
+
+#er-message-display {
+    width: 28vw;
+    padding-top: 0.6rem;
+    position: absolute;
+    right: 5vw;
+}
+
+.er-confirm {
+    float: left;
+}
+
+.er-cancel {
+    float: right;
+}
+
+.er-tussen-wrap {}
 
 .er-edit-wrap i {
     color: rgba(0, 0, 0, 0.2);
-}
-
-.er-edit-wrap table {
-    height: 2.2rem;
 }
 
 .er-display {
@@ -280,12 +451,8 @@ header a:active {
     transition-duration: 0.1s;
 }
 
-#er-confirm, #er-lick, #er-cancel {
-    width: 2.4rem;
-}
-
-#er-log {
-    width: 100%;
+.er-display-status {
+    display: inline-block;
 }
 
 .er-log-wrap {
@@ -351,23 +518,29 @@ header a:active {
 }
 
 .er-edit-label {
+    height: 0.6rem;
     font-size: 0.5rem;
     font-weight: 200;
     color: rgba(255, 255, 201, 0.6);
     letter-spacing: 0.15rem;
     margin-bottom: 0.2rem;
+    display: block;
+}
+
+.er-edit-label span {
+    display: none;
 }
 
 /* -------------------------input section */
 
-input[type=text] {
-    padding-left: 7.5rem;
-    padding-right: 7.5rem;
+input[type=text], input[type=password] {
+    padding-left: 1rem;
+    padding-right: 1rem;
     box-sizing: border-box;
     width: 100%;
     height: 2rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     text-align: center;
     color: rgba(255, 255, 201);
     background-color: rgba(0, 0, 0, 0.3);
@@ -383,12 +556,12 @@ input[type=text] {
 
 .er-input-red input[type=text] {
     border-color: rgba(211, 100, 110, 0.9);
-    z-index: 100;
+    z-index: 6000;
 }
 
 .er-input-yellow input[type=text] {
     border-color: rgba(195, 195, 19, 1);
-    z-index: 100;
+    z-index: 6000;
 }
 
 input[type=text]:focus {
@@ -485,19 +658,156 @@ button i {
     color: rgba(255, 255, 201, 0.9);
 }
 
-/* -------------------------Control section */
+/* -------------------------Audio control section */
 
-.er-controls {
-    width: 100%;
+.er-audio-row {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.2rem;
     letter-spacing: 0.05rem;
 }
 
-.er-audio-row {
-    padding-top: 0.2rem;
+.er-group-control {
+    width: 12vw;
+    height: 3.8rem;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    z-index: 5000;
 }
 
-.er-audio-row table {
-    border-spacing: 0px;
+.er-control-label {
+    display: inline-block;
+    overflow: hidden;
+    height: 0.8rem;
+    margin: 0rem auto;
+    font-size: 0.45rem;
+    font-weight: 400;
+    color: rgba(255, 255, 201, 0.6);
+    letter-spacing: 0.15rem;
+    padding: 0.1rem 0rem;
+}
+
+.er-control-label span {
+    display: none;
+}
+
+.er-desktop-label {
+    display: none;
+}
+
+.er-mobile-label {
+    display: inline-block;
+}
+
+.er-mobile-label span {
+    display: inline-block;
+}
+
+.er-empty-label {
+    display: inline-block;
+    margin: 0.3rem auto;
+    height: 0.8rem;
+}
+
+.er-control-field {
+    overflow: hidden;
+    border-radius: 0.45rem;
+}
+
+.er-control {
+    opacity: 1;
+    cursor: pointer;
+    transition-property: all;
+    transition-duration: 0.4;
+    transition-timing-function: ease-in-out;
+}
+
+.er-control-button {
+    height: 1.4rem;
+    margin: 0.3rem auto;
+}
+
+.er-skip-ms {
+    padding: 0.1rem 0;
+    height: 0.8rem;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.er-control-button i {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 1.4rem;
+}
+
+#er-skip-wrap {}
+
+.er-half-button {
+    height: 0.8rem;
+    display: block;
+    cursor: pointer;
+}
+
+.er-half-label {
+    display: none;
+}
+
+.er-half-top {
+    margin-top: 0rem;
+    margin-bottom: 0.7rem;
+}
+
+.er-half-bottom {
+    margin-top: 0rem;
+}
+
+.er-half-button i {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 0.45rem;
+}
+
+.er-button-doubler {
+    margin-bottom: 0rem;
+}
+
+.er-group-divider {
+    margin: 0 2rem;
+    padding: 0;
+    width: 0.03rem;
+    height: 4.2rem;
+    display: none;
+    background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(70, 72, 71, 1) 10%, rgba(70, 72, 71, 0.9) 66%, rgba(35, 35, 36, 0) 100%);
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: rgba(255, 255, 201, 0.08);
+    border-width: 0.01px;
+}
+
+.er-group-space {
+    margin: 0;
+    padding: 0;
+    width: 0.8rem;
+    height: 4.2rem;
+    display: none;
+}
+
+.er-control-time {
+    position: fixed;
+    bottom: 10rem;
+    right: 1rem;
+}
+
+#er-current-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+    color: rgba(211, 100, 110, 0.9);
+    margin-bottom: 0.3rem;
+}
+
+#er-total-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+    margin-top: 0.3rem;
+    color: rgba(255, 255, 255, 0.25);
 }
 
 .er-half-td {
@@ -512,11 +822,13 @@ button i {
     width: 86%;
 }
 
-.er-group-wrap {
+.er-group-oud {
     overflow: hidden;
     display: inline-block;
     width: unset;
     padding: 0 1rem;
+    margin-left: auto;
+    margin-right: auto;
     background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(35, 35, 36, 0.7) 100%);
     border-bottom-style: solid;
     border-left-style: solid;
@@ -525,34 +837,6 @@ button i {
     border-width: 0.01px;
     border-radius: 6rem;
     box-shadow: 3px 3px 1px rgba(56, 58, 57, 0.3);
-}
-
-.er-group-control {
-    margin: 0;
-    padding: 0;
-    width: 4.8rem;
-    display: inline-block;
-}
-
-.er-group-divider {
-    margin: 0 0.8em;
-    padding: 0;
-    width: 0.2rem;
-    height: 5.2rem;
-    display: inline-block;
-    background: linear-gradient(180deg, rgba(70, 72, 71, 0) 0%, rgba(70, 72, 71, 1) 10%, rgba(70, 72, 71, 0.9) 66%, rgba(35, 35, 36, 0) 100%);
-    border-left-style: dotted;
-    border-right-style: dotted;
-    border-color: rgba(35, 35, 36, 0.3);
-    border-width: 0.01px;
-}
-
-.er-group-space {
-    margin: 0;
-    padding: 0;
-    width: 0.8rem;
-    height: 5.2rem;
-    display: inline-block;
 }
 
 .er-group-space2 {
@@ -569,14 +853,15 @@ button i {
 }
 
 .er-skip-border {
-    border-bottom-style: solid;
-    border-color: rgba(255, 255, 201, 0.08);
+    border-bottom-style: none;
+    border-color: rgba(255, 255, 201, 0.1);
     border-width: 0.01px;
+    margin-bottom: 0px!important;
 }
 
 .er-skip-bottom {
-    border-bottom-style: solid;
-    border-color: rgba(255, 255, 201, 0.08);
+    border-bottom-style: none;
+    border-color: rgba(255, 255, 201, 0.1);
     border-width: 0.01px;
 }
 
@@ -584,7 +869,7 @@ button i {
     color: rgba(255, 255, 201, 0.08);
 }
 
-.er-control-button {
+.er-control-button-oud {
     overflow: hidden;
     width: 2rem;
     height: 2rem;
@@ -595,89 +880,6 @@ button i {
     border-width: 2px;
     border-radius: 1.2rem;
     box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.2);
-}
-
-.er-control-label {
-    overflow: hidden;
-    height: 0.8rem;
-    margin: 0.3rem auto;
-    font-size: 0.45rem;
-    font-weight: 400;
-    color: rgba(255, 255, 201, 0.6);
-    letter-spacing: 0.15rem;
-    width: 4.8rem;
-    padding: 0.1rem 0rem;
-}
-
-.er-control-field {
-    overflow: hidden;
-    border-radius: 0.45rem;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.er-control-button:hover, .er-half-button:hover {
-    background-color: rgba(0, 0, 0, 0.26);
-    box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.3);
-}
-
-.er-control-button:active, .er-half-button:active {
-    background-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 3px rgba(195, 195, 19, 0.3);
-}
-
-.er-control-button i {
-    color: rgba(0, 0, 0, 0.2);
-    font-size: 0.8rem;
-}
-
-.er-half-button {
-    overflow: hidden;
-    width: 1.8rem;
-    height: 0.8rem;
-    margin: 0.3rem auto;
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.1);
-    border-width: 2px;
-    border-radius: 0.8rem;
-    box-shadow: 1px 1px 3px rgba(195, 195, 19, 0.2);
-}
-
-.er-half-top {
-    margin-bottom: 0.5rem;
-}
-
-.er-half-bottom {
-    margin-top: 0.5rem;
-}
-
-.er-half-button i {
-    color: rgba(0, 0, 0, 0.2);
-    font-size: 0.45rem;
-}
-
-.er-button-doubler {
-    height: 2.4rem;
-}
-
-.er-skip-ms {
-    padding: 0.1rem 0;
-    height: 0.8rem;
-    color: rgba(255, 255, 255, 0.2);
-}
-
-.er-control {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    cursor: pointer;
-    overflow: hidden;
-    transition-property: all;
-    transition-duration: 0.4;
-    transition-timing-function: ease-in-out;
 }
 
 .er-control-hide {
@@ -736,11 +938,11 @@ button i {
 }
 
 .er-control-yellow i {
-    color: rgba(195, 195, 19, 1);
+    color: rgba(156, 156, 19, 8);
 }
 
 .er-yellow {
-    color: rgba(195, 195, 19, 1);
+    color: rgba(156, 156, 19, 8);
 }
 
 .er-dark {
@@ -752,7 +954,7 @@ button i {
 }
 
 .er-control-blue i {
-    color: rgb(55, 139, 236);
+    color: rgb(65, 0, 255);
 }
 
 .er-control-hya {
@@ -769,7 +971,7 @@ button i {
 }
 
 .er-control-purple i {
-    color: rgba(171, 0, 255);
+    color: rgba(120, 0, 179);
 }
 
 .er-hover-purple:hover i {
@@ -778,7 +980,7 @@ button i {
 }
 
 .er-purple {
-    color: rgba(171, 0, 255);
+    color: rgba(151, 33, 255);
 }
 
 .er-control-dark i {
@@ -813,20 +1015,6 @@ button i {
 .er-hover-grey i:hover {
     color: rgba(255, 255, 201, 0.6);
     cursor: pointer;
-}
-
-#er-current-time {
-    font-size: 0.7rem;
-    letter-spacing: 0.1rem;
-    color: rgba(211, 100, 110, 0.9);
-    margin-bottom: 0.3rem;
-}
-
-#er-total-time {
-    font-size: 0.7rem;
-    letter-spacing: 0.1rem;
-    margin-top: 0.3rem;
-    color: rgba(255, 255, 255, 0.25);
 }
 
 /* -------------------------Form classes */
@@ -986,6 +1174,14 @@ input[type=range]:focus::-ms-fill-upper {
     }
     .er-header {
         width: 80vw;
+        height: 4.8rem;
+        top: 0;
+        border-bottom-style: solid;
+    }
+    .er-logo {
+        display: block;
+        font-size: 1.8rem;
+        top: 1.6rem;
     }
     .er-waveform-old {
         left: -42vh;
@@ -1004,28 +1200,101 @@ input[type=range]:focus::-ms-fill-upper {
     .er-line-out {
         font-size: 0.8rem;
     }
-    .er-control-button {
-        width: 2.4rem;
-        height: 2.4rem;
+    .er-input-row {
+        position: unset;
+        top: unset;
     }
-    .er-control-button i {
-        font-size: 1.1rem;
+    .er-control-time {
+        bottom: 20rem;
     }
-    .er-button-doubler {
-        height: 2.4rem;
+    .er-wrap {
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+    /* -------------------------Wraps (locations) */
+    #er-input-wrap {
+        bottom: 6rem;
+    }
+    #er-panels-wrap {
+        bottom: 9rem;
+        top: unset;
+    }
+    #er-waveform-wrap {
+        bottom: 13rem;
+        top: unset;
+    }
+    #er-controls-wrap {
+        bottom: 0;
+        top: unset;
+    }
+    #er-edit-wrap {
+        display: inline-block;
+        border-radius: 0.3rem;
+    }
+    .er-edit-label span {
+        display: inline-block;
+    }
+    #er-edit-wave {
+        position: absolute;
+        left: 5vw;
+    }
+    #er-edit-comments {
+        position: absolute;
+        left: 14vw;
+    }
+    #er-edit-current {
+        position: absolute;
+        right: unset;
+        left: 23vw;
+    }
+    #er-delete-current {
+        position: absolute;
+        right: unset;
+        left: 32vw;
+    }
+    #er-position-wrap {
+        width: 28%;
+    }
+    #er-display-wrap {
+        display: inline-block;
+    }
+    #er-message-display {
+        display: inline-block;
+        width: unset;
+    }
+    #wave-timeline {
+        display: block;
+        opacity: 0.5;
+    }
+    .er-group-control {
+        width: 10vw;
+    }
+    .er-control-label {
+        width: 5rem;
+    }
+    .er-control-label span {
+        display: inline-block;
+    }
+    .er-desktop-label {
+        display: inline-block;
+    }
+    .er-mobile-label {
+        display: none;
+    }
+    .er-skip-border, .er-skip-bottom {
+        border-bottom-style: solid;
     }
     .er-half-button {
-        width: 2.4rem;
-        height: 1rem;
+        display: block;
     }
-    .er-half-button i {
-        font-size: 0.7rem;
+    .er-group-divider {
+        display: inline-block;
     }
-    .er-half-top {
-        margin-bottom: 0.4rem;
+    .er-group-divider {
+        display: inline-block;
     }
-    .er-half-bottom {
-        margin-top: 0.4rem;
+    .er-control-field {
+        background-color: none;
     }
     .er-button-label {
         display: inline;
