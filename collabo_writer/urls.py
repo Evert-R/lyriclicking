@@ -18,12 +18,36 @@ from django.urls import include, path
 from django.views import static
 from django.conf.urls.static import static
 from django.conf import settings
-from workspaces.views import work_space
+from django.contrib.auth import views as auth_views
+from accounts.forms import ResetPasswordForm, PasswordSetForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', work_space, name='work_space'),
+    path('lyriclicker/', include('lyriclicker.urls')),
     path('lyrics/', include('lyrics.urls')),
+    path('accounts/', include('accounts.urls')),
+
+    path('reset_password/',
+         auth_views.PasswordResetView.as_view(
+             form_class=ResetPasswordForm,
+             template_name='resetpassword.html'),
+         name='reset_password'),
+
+    path('reset_password_sent/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='passwordsent.html'),
+         name="password_reset_done"),
+
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             form_class=PasswordSetForm,
+             template_name='setpassword.html'),
+         name="password_reset_confirm"),
+
+    path('reset_password_complete/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='passwordset.html'),
+         name="password_reset_complete"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
