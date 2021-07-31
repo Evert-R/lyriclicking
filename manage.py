@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collabo_writer.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lyriclicking.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
