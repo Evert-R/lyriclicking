@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!-- Login page -->
+<article class="er-site-wrap">
+    <form class="form-horizontal" method="post">
+        <div class="er-form-wrap">
+            <div class="er-form-row">
+                <p>
+                    <a class="" href="{% url 'reset_password' %}?next={{ next }}" title="Reset your password"><i
+                            class="fas fa-envelope"></i> Forgot your password?
+                        Click here to reset </a>
+                </p>
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            {% crispy accounts_form accounts_form.helper %}
+            <div class="er-form-row">
+                <p>
+                    <a class="" href="{% url 'accounts:register_user' %}?next={{ next }}"
+                        title="Register as a new customer">Don't
+                        have an account? Please register here <i class="fas fa-user-plus"></i></a>
+                </p>
+            </div>
+        </div>
+    </form>
+</article>
+
+<!-- Load special screen events (highlite shop item in navbar-->
+
+
+{% endblock %}
